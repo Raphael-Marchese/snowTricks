@@ -1,0 +1,50 @@
+@startuml
+actor UtilisateurNonConnecte
+participant "Page d'accueil"
+participant "Page Détail Figure"
+participant "Page d'Inscription"
+participant "Page de Connexion"
+participant "Serveur Web"
+participant "Base de données"
+participant "Service Email"
+
+== Consultation de la liste des figures ==
+UtilisateurNonConnecte -> "Page d'accueil" : Accéder à la liste des figures
+"Page d'accueil" -> "Serveur Web" : Requête liste des figures
+"Serveur Web" -> "Base de données" : Récupérer liste des figures
+"Base de données" --> "Serveur Web" : Retourner liste des figures
+"Serveur Web" --> "Page d'accueil" : Afficher liste des figures
+"Page d'accueil" --> UtilisateurNonConnecte : Affichage de la liste
+
+== Consultation d'une figure et de l'espace de discussion ==
+UtilisateurNonConnecte -> "Page Détail Figure" : Cliquer sur une figure
+"Page Détail Figure" -> "Serveur Web" : Requête détails figure
+"Serveur Web" -> "Base de données" : Récupérer détails + messages
+"Base de données" --> "Serveur Web" : Retourner informations et messages
+"Serveur Web" --> "Page Détail Figure" : Afficher détail et discussion
+"Page Détail Figure" --> UtilisateurNonConnecte : Affichage de la page de détail
+
+== Inscription ==
+UtilisateurNonConnecte -> "Page d'Inscription" : Remplir formulaire d'inscription
+"Page d'Inscription" -> "Serveur Web" : Envoyer données d'inscription
+"Serveur Web" -> "Base de données" : Vérifier unicité nom d'utilisateur/email
+alt Si unique
+    "Serveur Web" -> "Base de données" : Créer nouvel utilisateur
+    "Serveur Web" -> "Service Email" : Envoi email confirmation avec token
+    "Service Email" --> UtilisateurNonConnecte : Email de confirmation
+else Si existant
+    "Serveur Web" --> "Page d'Inscription" : Message d'erreur
+end
+
+== Connexion ==
+UtilisateurNonConnecte -> "Page de Connexion" : Saisir nom d'utilisateur et mot de passe
+"Page de Connexion" -> "Serveur Web" : Envoyer informations de connexion
+"Serveur Web" -> "Base de données" : Vérifier identifiants
+alt Si valide
+    "Base de données" --> "Serveur Web" : Identifiants corrects
+    "Serveur Web" --> "Page de Connexion" : Rediriger vers page d'accueil
+else Si invalide
+    "Base de données" --> "Serveur Web" : Identifiants incorrects
+    "Serveur Web" --> "Page de Connexion" : Message d'erreur
+end
+@enduml
