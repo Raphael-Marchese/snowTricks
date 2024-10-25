@@ -1,0 +1,61 @@
+@startuml
+class User {
+    + id : int
+    + username : string
+    + email : string
+    + password : string
+    + profilePicture : string
+    + isAuthenticated : boolean
+    + register() : void
+    + login() : void
+    + logout() : void
+}
+
+class Figure {
+    + id : int
+    + name : string
+    + createdAt : DateTime
+    + updatedAt : DateTime
+    + description : string
+    + group : string
+    + illustrations : List<string>
+    + videos : List<string>
+    + create() : void
+    + edit() : void
+    + delete() : void
+}
+
+class Message {
+    + id : int
+    + content : string
+    + createdAt : DateTime
+    + updatedAt : DateTime
+    + author : User
+    + figure : Figure
+    + publish() : void
+    + delete() : void
+}
+
+class Discussion {
+    + id : int
+    + figure : Figure
+    + messages : List<Message>
+    + addMessage(message : Message) : void
+    + deleteMessage(message : Message) : void
+    + listMessages() : List<Message>
+}
+
+class Authentication {
+    + login(username : string, password : string) : boolean
+    + logout() : void
+    + forgotPassword(email : string) : void
+    + resetPassword(token : string, newPassword : string) : void
+}
+
+User "1" -- "0..*" Figure : create
+User "1" -- "0..*" Message : write
+Figure "1" -- "0..*" Message : receive
+Figure "1" -- "1" Discussion : a
+Discussion "1" -- "0..*" Message : contains
+
+@enduml
