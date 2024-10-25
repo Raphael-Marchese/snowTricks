@@ -9,6 +9,7 @@ usecase "Créer une figure" as CreerFigure
 usecase "Modifier une figure" as ModifierFigure
 usecase "Supprimer une figure" as SupprimerFigure
 }
+
 package Profile {
 usecase "Réinitialiser le mot de passe" as ReinitialiserMotDePasse
 }
@@ -16,8 +17,6 @@ usecase "Réinitialiser le mot de passe" as ReinitialiserMotDePasse
 package Message {
 usecase "Poster un message" as PosterMessage
 usecase "Consulter l'espace de discussion" as ConsulterDiscussion
-
-
 }
 
 ConsulterListeFigures <-- UtilisateurConnecte
@@ -25,10 +24,10 @@ ConsulterDetailFigure <-- UtilisateurConnecte
 CreerFigure <-- UtilisateurConnecte
 ModifierFigure <-- UtilisateurConnecte
 SupprimerFigure <-- UtilisateurConnecte
+
 UtilisateurConnecte --> ConsulterDiscussion
 UtilisateurConnecte --> PosterMessage
+
 UtilisateurConnecte --> ReinitialiserMotDePasse
 
 @enduml
-
-
