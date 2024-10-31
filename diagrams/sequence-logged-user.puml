@@ -1,0 +1,47 @@
+@startuml
+actor UtilisateurConnecte
+participant "Page Création Figure"
+participant "Page Modification Figure"
+participant "Page Détail Figure"
+participant "Page Réinitialisation"
+participant "Serveur Web"
+participant "Base de données"
+participant "Service Email"
+
+== Création d'une figure ==
+UtilisateurConnecte -> "Page Création Figure" : Accéder au formulaire de création
+UtilisateurConnecte -> "Page Création Figure" : Soumettre informations de la figure
+"Page Création Figure" -> "Serveur Web" : Transmettre données de création
+"Serveur Web" -> "Base de données" : Vérifier unicité nom de figure
+alt Si unique
+    "Serveur Web" -> "Base de données" : Enregistrer figure
+    "Serveur Web" --> "Page Création Figure" : Redirection + message de succès
+else Si existant
+    "Serveur Web" --> "Page Création Figure" : Message d'erreur
+end
+
+== Modification d'une figure ==
+UtilisateurConnecte -> "Page Modification Figure" : Accéder au formulaire de modification
+"Page Modification Figure" -> "Serveur Web" : Charger données actuelles de la figure
+"Serveur Web" -> "Base de données" : Récupérer figure existante
+"Base de données" --> "Serveur Web" : Retourner figure actuelle
+UtilisateurConnecte -> "Page Modification Figure" : Modifier et soumettre
+"Page Modification Figure" -> "Serveur Web" : Envoyer données modifiées
+"Serveur Web" -> "Base de données" : Mettre à jour la figure
+"Serveur Web" --> "Page Modification Figure" : Confirmation de mise à jour
+
+== Publication d’un message dans l’espace de discussion ==
+UtilisateurConnecte -> "Page Détail Figure" : Saisir message
+"Page Détail Figure" -> "Serveur Web" : Envoyer message
+"Serveur Web" -> "Base de données" : Enregistrer message
+"Base de données" --> "Serveur Web" : Confirmation d'enregistrement
+"Serveur Web" --> "Page Détail Figure" : Rafraîchir liste des messages
+"Page Détail Figure" --> UtilisateurConnecte : Affichage du message posté
+
+== Réinitialisation du mot de passe ==
+UtilisateurConnecte -> "Page Réinitialisation" : Saisir nouveau mot de passe
+"Page Réinitialisation" -> "Serveur Web" : Transmettre nouveau mot de passe
+"Serveur Web" -> "Base de données" : Mettre à jour mot de passe
+"Base de données" --> "Serveur Web" : Confirmation de mise à jour
+"Serveur Web" --> "Page Réinitialisation" : Rediriger vers page d'accueil
+@enduml

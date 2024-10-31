@@ -1,0 +1,25 @@
+@startuml
+
+actor "Utilisateur non connecté" as UtilisateurNonConnecte
+
+package Figure {
+    usecase "Consulter la liste des figures" as ConsulterListeFigures
+    usecase "Consulter le détail d'une figure" as ConsulterDetailFigure
+    usecase "Consulter l'espace de discussion" as ConsulterDiscussion
+}
+
+package Profile {
+    usecase "S'inscrire" as SInscrire
+    usecase "Se connecter" as SeConnecter
+    usecase "Mot de passe oublié" as MotDePasseOublie
+}
+
+UtilisateurNonConnecte --> ConsulterListeFigures
+UtilisateurNonConnecte --> ConsulterDetailFigure
+UtilisateurNonConnecte --> ConsulterDiscussion
+
+SInscrire <-- UtilisateurNonConnecte
+SeConnecter <-- UtilisateurNonConnecte
+MotDePasseOublie <-- UtilisateurNonConnecte
+
+@enduml
