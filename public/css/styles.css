@@ -9,3 +9,10 @@
     border-radius: 8px;
     z-index: -1;
 }
+
+@media (min-width: 1200px) {
+    .col-xl-5th {
+        flex: 0 0 20%; /* Prend exactement 1/5e de la ligne */
+        max-width: 20%;
+    }
+}
