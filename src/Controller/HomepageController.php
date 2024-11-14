@@ -17,7 +17,6 @@ class HomepageController extends AbstractController
         $figures = $figureRepository->findAll();
 
         return $this->render('homepage/index.html.twig', [
-            'controller_name' => 'HomepageController',
             'figures' => $figures
         ]);
     }
