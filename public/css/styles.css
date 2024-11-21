@@ -1,0 +1,18 @@
+.overlay-text::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 8px;
+    z-index: -1;
+}
+
+@media (min-width: 1200px) {
+    .col-xl-5th {
+        flex: 0 0 20%; /* Prend exactement 1/5e de la ligne */
+        max-width: 20%;
+    }
+}
