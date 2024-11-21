@@ -237,34 +237,26 @@
             const thumbnails = document.querySelectorAll('.thumbnail');
             const previewImage = document.getElementById('previewImage');
 
-            // Fonction pour mettre à jour l'aperçu
             const updatePreview = (src) => {
                 previewImage.src = src;
             };
 
-            // Gestion de la sélection de la vignette
             const selectThumbnail = (selected) => {
-                // Supprime la classe "selected-thumbnail" de toutes les vignettes
                 thumbnails.forEach(thumbnail => thumbnail.classList.remove('selected-thumbnail'));
 
-                // Ajoute la classe "selected-thumbnail" à la vignette sélectionnée
                 selected.classList.add('selected-thumbnail');
             };
 
-            // Gestion du clic sur les vignettes
             thumbnails.forEach(thumbnail => {
                 thumbnail.addEventListener('click', () => {
                     const src = thumbnail.dataset.src;
 
-                    // Mettre à jour l'aperçu
                     updatePreview(src);
 
-                    // Mettre à jour la sélection
                     selectThumbnail(thumbnail);
                 });
             });
 
-            // Sélectionner par défaut la première vignette
             if (thumbnails.length > 0) {
                 thumbnails[0].classList.add('selected-thumbnail');
             }
