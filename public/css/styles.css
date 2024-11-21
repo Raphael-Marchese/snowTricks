@@ -12,7 +12,26 @@
 
 @media (min-width: 1200px) {
     .col-xl-5th {
-        flex: 0 0 20%; /* Prend exactement 1/5e de la ligne */
+        flex: 0 0 20%;
         max-width: 20%;
     }
+}
+
+#thumbnailContainer {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+}
+#thumbnailContainer::-webkit-scrollbar {
+    display: none;
+}
+.thumbnail {
+    flex-shrink: 0;
+}
+
+.selected-thumbnail {
+    border: 3px solid #007bff; /* Couleur de la bordure */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.6); /* Légère ombre pour un effet visuel */
+    border-radius: 5px; /* Même arrondi que les vignettes */
 }

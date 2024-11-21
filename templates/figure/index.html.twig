@@ -1,0 +1,275 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    <main class="flex-shrink-0">
+        {#            <div class="d-flex justify-content-end m-3">
+                {% if session.user_id == post.author.id %}
+                    <a href="/post/{{ post.id }}/edit">
+                    <button class="btn btn-secondary me-3">Modifier</button>
+                </a>
+                {% endif %}
+                {% if session.user_id == post.author.id or session.role == 'ROLE_ADMIN' %}
+                <a href="/post/{{ post.id }}/delete">
+                    <button class="btn btn-danger">Supprimer</button>
+                </a>
+                {% endif %}
+            </div> #}
+
+
+        <!-- Page Content-->
+        <section class="py-5">
+            <div class="container px-5 my-5">
+                <div class="row gx-5 justify-content-center">
+                    <div class="col-lg-9">
+                        <!-- Post content-->
+                        <article>
+                            <!-- Post header-->
+                            <header class="mb-4">
+                                <!-- Post title-->
+                                <h1 class="fw-bolder mb-1">{{ figure.name }}</h1>
+                                <div class="d-flex gap-2">
+                                    <h4>Groupe : </h4>
+                                    <p class="card-text mb-0">{{ figure.figureGroup|raw }}</p>
+                                </div>
+
+
+                                <!-- Post meta content-->
+                                {% if figure.updatedAt %}
+                                    <div class="text-muted fst-italic mb-2">Mis à jour
+                                        le {{ figure.updatedAt|format_datetime('full', 'short', locale='fr') }}</div>
+                                {% else %}
+                                    <div class="text-muted fst-italic mb-2">{{ figure.createdAt|format_datetime('full', 'short', locale='fr') }}</div>
+                                {% endif %}
+                                <div class="text-muted">{{ figure.author.username|raw }}</div>
+
+
+                            </header>
+
+                            <div class="container mt-4">
+                                <!-- Zone d'aperçu -->
+                                <div id="preview" class="mb-3 text-center">
+                                    <img id="previewImage" src="{{ asset(medias|first) }}" alt="Preview" class="img-fluid"
+                                         style="max-height: 400px;">
+                                    <video id="previewVideo" controls class="img-fluid d-none"
+                                           style="max-height: 400px;">
+                                        <source id="videoSource" src="">
+                                        Votre navigateur ne supporte pas les vidéos.
+                                    </video>
+                                </div>
+
+                                <!-- Liste de vignettes -->
+                                <div class="d-flex align-items-center">
+                                    <!-- Flèche gauche -->
+                                    <button class="btn btn-outline-primary" id="arrowLeft">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </button>
+
+                                    <!-- Galerie de vignettes -->
+                                    <div class="flex-grow-1 overflow-auto d-flex" id="thumbnailContainer"
+                                         style="gap: 10px;">
+                                        {% for media in medias %}
+                                                <img
+                                                        src="{{ asset(media) }}"
+                                                        class="img-thumbnail thumbnail"
+                                                        alt="Image"
+                                                        data-type="image"
+                                                        data-src="{{ asset(media) }}"
+                                                        style="cursor: pointer; width: 100px; height: 100px;">
+{#                                                <img
+                                                        src="{{ asset(media.thumbnail) }}"
+                                                        class="img-thumbnail thumbnail"
+                                                        alt="Video"
+                                                        data-type="video"
+                                                        data-src="{{ asset(media.url) }}"
+                                                        style="cursor: pointer; height: 100px;">#}
+                                        {% endfor %}
+                                    </div>
+
+                                    <!-- Flèche droite -->
+                                    <button class="btn btn-outline-primary" id="arrowRight">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Preview image figure-->
+                            {#                            <figure class="mb-4">
+                                {% if figure.illustrations %}
+                                    <img class="img-fluid" src="../../../public/assets/images/{{ figure.image }}"
+                                         alt="..."/>
+                                {% else %}
+                                    <img class="img-fluid rounded" src="../../../public/assets/websiteUtils/franken.png"
+                                         alt="Photo illustration article"/>
+                                {% endif %}
+                            </figure> #}
+                            <!-- Post content-->
+                            <section class="mb-5">
+                                <h1>Description de la figure</h1>
+                                <p class="fs-5 mb-4">{{ figure.description|raw }}</p>
+                            </section>
+                        </article>
+                        <!-- Comments section-->
+                        {# <section>
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <!-- Comment form-->
+                                    {% if session and not commentEdit %}
+                                        <form class="mb-4 d-flex gap-2" id="createCommentForm" method="post"
+                                              action="/comment/create/submit">
+                                            <textarea name="content" id="comment-content" class="form-control" rows="3"
+                                                      placeholder="Écrivez ici votre commentaire"></textarea>
+                                            <button class="btn btn-warning btn-sm me-md-2">Commenter</button>
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                                        </form>
+                                    {% endif %}
+
+                                    {% if commentEdit %}
+                                        <h2>Modification du commentaire</h2>
+                                        <form class="mb-4 d-flex gap-2" id="editCommentForm" method="post"
+                                              action="/comment/{{ editedComment.id }}/edit/submit">
+                                            <label for="edit-comment-content"></label>
+                                            <textarea name="content" id="edit-comment-content" class="form-control"
+                                                      rows="3"
+                                                      placeholder="Écrivez ici votre commentaire">{{ editedComment.content|raw }}</textarea>
+
+                                            <button class=" btn btn-warning btn-sm me-md-2">Modifier</button>
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                                            <input type="hidden" name="comment_id" value="{{ editedComment.id }}">
+
+                                        </form>
+                                    {% endif %}
+
+                                    {% if not commentEdit %}
+                                        <h2>Commentaires</h2>
+
+                                        <div class="d-flex flex-column gap-2 ">
+                                            {% for comment in comments %}
+                                                {% if comment.status == 'pending' %}
+                                                    {% if session.role == 'ROLE_ADMIN' %}
+                                                        <div class="ms-3 text-muted">
+                                                            {{ comment.content|raw }}
+                                                        </div>
+                                                        <form action="/comment/{{ comment.id }}/status/edit"
+                                                              method="POST" id="toggleCommentStatusForm">
+                                                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                                                            <div class="form-check form-switch align-items-end">
+                                                                <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
+                                                                        role="switch"
+                                                                        id="flexSwitchCheckDefault"
+                                                                        name="toggle"
+                                                                        onchange="this.form.submit()"
+                                                                >
+                                                                <label class="form-check-label"
+                                                                       for="flexSwitchCheckDefault">Publier le
+                                                                    commentaire</label>
+                                                            </div>
+                                                        </form>
+                                                    {% endif %}
+
+                                                    {% if session.user_id == comment.author.id %}
+                                                        <div class="d-flex  align-items-center ">
+                                                            <div class="flex-shrink-0"><img class="rounded-circle"
+                                                                                            style="width: 50px; height: 50px;"
+                                                                                            src="../../../public/assets/websiteUtils/user.png"
+                                                                                            alt="..."/></div>
+                                                            <div class="fw-bold ms-3 text-muted">{{ comment.author.username|raw }}</div>
+                                                        </div>
+                                                        <div class="ms-3 text-muted">
+                                                            {{ comment.content|raw }}
+                                                        </div>
+
+                                                        <div class="ms-3 text-info">
+                                                            Votre commentaire doit être validé pour apparaitre en ligne
+                                                        </div>
+                                                        <div class="d-flex justify-content-end m-3">
+                                                            <a href="/comment/{{ comment.id }}/edit">
+                                                                <button class="btn btn-secondary me-3">Modifier</button>
+                                                            </a>
+                                                            <a href="/comment/{{ comment.id }}/delete">
+                                                                <button class="btn btn-danger">Supprimer</button>
+                                                            </a>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% if comment.status == 'published' %}
+                                                    <div class="d-flex  align-items-center ">
+                                                        <div class="flex-shrink-0"><img class="rounded-circle"
+                                                                                        style="width: 50px; height: 50px;"
+                                                                                        src="../../../public/assets/websiteUtils/user.png"
+                                                                                        alt="..."/></div>
+                                                        <div class="fw-bold ms-3">{{ comment.author.username|raw }}</div>
+                                                    </div>
+                                                    <div class="ms-3">
+                                                        {{ comment.content|raw }}
+                                                    </div>
+                                                    {% if session.user_id == comment.author.id or session.role == 'ROLE_ADMIN' %}
+                                                        <div class="d-flex justify-content-end m-3">
+                                                            <a href="/comment/{{ comment.id }}/edit">
+                                                                <button class="btn btn-secondary me-3">Modifier</button>
+                                                            </a>
+                                                            <a href="/comment/{{ comment.id }}/delete">
+                                                                <button class="btn btn-danger">Supprimer</button>
+                                                            </a>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class=" text-danger mb-3">{{ errors.csrf_token }}</div>
+                        </section> #}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            const previewImage = document.getElementById('previewImage');
+
+            // Fonction pour mettre à jour l'aperçu
+            const updatePreview = (src) => {
+                previewImage.src = src;
+            };
+
+            // Gestion de la sélection de la vignette
+            const selectThumbnail = (selected) => {
+                // Supprime la classe "selected-thumbnail" de toutes les vignettes
+                thumbnails.forEach(thumbnail => thumbnail.classList.remove('selected-thumbnail'));
+
+                // Ajoute la classe "selected-thumbnail" à la vignette sélectionnée
+                selected.classList.add('selected-thumbnail');
+            };
+
+            // Gestion du clic sur les vignettes
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', () => {
+                    const src = thumbnail.dataset.src;
+
+                    // Mettre à jour l'aperçu
+                    updatePreview(src);
+
+                    // Mettre à jour la sélection
+                    selectThumbnail(thumbnail);
+                });
+            });
+
+            // Sélectionner par défaut la première vignette
+            if (thumbnails.length > 0) {
+                thumbnails[0].classList.add('selected-thumbnail');
+            }
+        });
+
+    </script>
+{% endblock %}
+
