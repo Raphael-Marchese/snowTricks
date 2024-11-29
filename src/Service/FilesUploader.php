@@ -30,5 +30,4 @@ class FilesUploader
         return $fileName;
     }
 
-
 }
