@@ -49,13 +49,12 @@ class AppFixtures extends Fixture
         $manager->persist($user4);
 
         $figure = new Figure();
-        $figure->setAuthor($user);
-        $figure->setName('indy');
-        $figure->setDescription(
-            'Saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière'
-        );
-        $figure->setFigureGroup('grabs');
-        $figure->setCreatedAt(new \DateTimeImmutable());
+        $figure->author = $user;
+        $figure->name = 'indy';
+        $figure->description =
+            'Saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière';
+        $figure->figureGroup = 'grabs';
+        $figure->createdAt = new \DateTimeImmutable();
         $manager->persist($figure);
 
         $users = [$user, $user2, $user3, $user4];
@@ -184,12 +183,12 @@ class AppFixtures extends Fixture
         foreach ($figuresData as $data) {
             $figure = new Figure();
 
-            $figure->setAuthor($users[array_rand($users)]);
+            $figure->author = $users[array_rand($users)];
 
-            $figure->setName($data['name']);
-            $figure->setDescription($data['description']);
-            $figure->setFigureGroup($data['group']);
-            $figure->setCreatedAt(new \DateTimeImmutable());
+            $figure->name = $data['name'];
+            $figure->description = $data['description'];
+            $figure->figureGroup = $data['group'];
+            $figure->createdAt = new \DateTimeImmutable();
             $manager->persist($figure);
 
             foreach ($data['messages'] as $msgContent) {

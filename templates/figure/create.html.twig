@@ -1,0 +1,144 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    <main class="flex-shrink-0">
+        <!-- Page Content-->
+        <section class="py-5">
+            <div class="container px-5">
+                <!-- Contact form-->
+                <div class="bg-light rounded-3 py-5 px-4 px-md-5 mb-5">
+                    <div class="text-center mb-5">
+                        <h1 class="fw-bolder">Créer une figure</h1>
+                        <p class="lead fw-normal text-muted mb-0">Ajoutez ici votre figure </p>
+                    </div>
+                    <div class="row gx-5 justify-content-center">
+                        <div class="col-lg-8 col-xl-6">
+
+                            <form id="createPostForm" method="post"
+                                  enctype="multipart/form-data">
+                                {{ form_start(form) }}
+                                <!-- Figure Name input-->
+                                <div class="form-floating mb-3">
+                                    <input class="form-control"
+                                            name="{{ field_name(form.name) }}"
+                                            value="{{ field_value(form.name) }}"
+                                            placeholder="Nom de la figure"
+                                    />
+                                    <label for={{ field_name(form.name) }}>Nom</label>
+                                </div>
+                                <!-- Figure Group input-->
+                                <div class="form-floating mb-3">
+                                    <input class="form-control"
+                                           name="{{ field_name(form.figureGroup) }}"
+                                           value="{{ field_value(form.figureGroup) }}"
+                                           placeholder="Nom de la figure"
+                                    />
+                                    <label for={{ field_name(form.figureGroup) }}>Groupe figure</label>
+                                </div>
+
+                                <ul id="illustrations-list" class="list-unstyled" data-prototype="{{ form_widget(form.illustrations.vars.prototype)|e }}" >
+                                    {% do form.illustrations.setRendered() %}
+
+                                    {% for illustrationField in form.illustrations %}
+                                        <li >
+                                            {{ form_widget(illustrationField) }}
+                                            {{ form_errors(illustrationField) }}
+
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                                <button type="button" id="add-illustration-btn" class="btn btn-primary m-3 ">Ajouter une image</button>
+
+                                <ul id="videos-list" class="list-unstyled" data-prototype="{{ form_widget(form.videos.vars.prototype)|e }}">
+                                    {% do form.videos.setRendered() %}
+
+                                    {% for videoField in form.videos %}
+                                        <li>
+                                            {{ form_widget(videoField) }}
+                                            {{ form_errors(videoField) }}
+
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                                <button type="button" id="add-video-btn" class="btn btn-primary m-3 ">Ajouter une vidéo</button>
+
+                                <!-- Content input-->
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control"
+                                              name="{{ field_name(form.description) }}"
+                                              value="{{ field_value(form.description) }}"
+                                              placeholder="Description de la figure" style="height: 20rem" ></textarea>
+                                    <label for={{ field_name(form.description) }}>Description</label>
+                                </div>
+
+
+                                <!-- Submit Button-->
+                                <div class="d-grid">
+                                    <button class="btn btn-primary btn-lg " name="submitButton" id="publish"
+                                            value="published" type="submit">Publier
+                                    </button>
+                                </div>
+                                {{ form_rest(form) }}
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const addButton = document.getElementById('add-illustration-btn');
+    const list = document.getElementById('illustrations-list');
+    const prototype = list.dataset.prototype; // Symfony génère automatiquement un prototype si configuré
+
+    let index = list.children.length;
+
+    addButton.addEventListener('click', () => {
+        const newForm = prototype.replace(/__name__/g, index);
+        const newElement = document.createElement('li');
+        newElement.innerHTML = newForm;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'ms-2', 'mt-2');
+        deleteButton.innerHTML = 'Supprimer';
+        deleteButton.addEventListener('click', () => {
+            newElement.remove();
+        });
+        newElement.appendChild(deleteButton);
+        list.appendChild(newElement);
+        index++;
+    });
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const addButton = document.getElementById('add-video-btn');
+    const list = document.getElementById('videos-list');
+    const prototype = list.dataset.prototype;
+
+    let index = list.children.length;
+
+    addButton.addEventListener('click', () => {
+        const newForm = prototype.replace(/__name__/g, index);
+        const newElement = document.createElement('li');
+        newElement.innerHTML = newForm;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'ms-2', 'mt-2');
+        deleteButton.innerHTML = 'Supprimer';
+        deleteButton.addEventListener('click', () => {
+            newElement.remove();
+        });
+        newElement.appendChild(deleteButton);
+        list.appendChild(newElement);
+        index++;
+    });
+});
+</script>
+
+{% endblock %}
