@@ -48,7 +48,8 @@
                             <div class="container mt-4">
                                 <!-- Zone d'aperçu -->
                                 <div id="preview" class="mb-3 text-center">
-                                    <img id="previewImage" src="{{ asset(medias|first) }}" alt="Preview" class="img-fluid"
+                                    <img id="previewImage" src="{{ asset(medias|first) }}" alt="Preview"
+                                         class="img-fluid"
                                          style="max-height: 400px;">
                                     <video id="previewVideo" controls class="img-fluid d-none"
                                            style="max-height: 400px;">
@@ -67,22 +68,39 @@
                                     <!-- Galerie de vignettes -->
                                     <div class="flex-grow-1 overflow-auto d-flex" id="thumbnailContainer"
                                          style="gap: 10px;">
-                                        {% for media in medias %}
+                                        {% if figure.illustrations %}
+
+                                            {% for image in figure.illustrations %}
                                                 <img
-                                                        src="{{ asset(media) }}"
+                                                        src="{{ asset( 'uploads/illustrations/' ~ image ) }}"
                                                         class="img-thumbnail thumbnail"
                                                         alt="Image"
                                                         data-type="image"
-                                                        data-src="{{ asset(media) }}"
+                                                        data-src="{{ asset( 'uploads/illustrations/' ~ image ) }}"
                                                         style="cursor: pointer; width: 100px; height: 100px;">
-{#                                                <img
+                                                {#                                                <img
                                                         src="{{ asset(media.thumbnail) }}"
                                                         class="img-thumbnail thumbnail"
                                                         alt="Video"
                                                         data-type="video"
                                                         data-src="{{ asset(media.url) }}"
-                                                        style="cursor: pointer; height: 100px;">#}
-                                        {% endfor %}
+                                                        style="cursor: pointer; height: 100px;"> #}
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        {% if figure.videos %}
+
+                                            {% for video in figure.videos %}
+                                                <video id="previewVideo" controls class="img-fluid d-none"
+                                                       style="max-height: 400px;">
+                                                    <source id="videoSource"
+                                                            src="{{ asset( 'uploads/videos/' ~ video ) }}">
+                                                    Votre navigateur ne supporte pas les vidéos.
+                                                </video>
+                                            {% endfor %}
+                                        {% endif %}
+
+
                                     </div>
 
                                     <!-- Flèche droite -->
@@ -93,7 +111,7 @@
                             </div>
 
                             <!-- Preview image figure-->
-                            {#                            <figure class="mb-4">
+                            {#                                                        <figure class="mb-4">
                                 {% if figure.illustrations %}
                                     <img class="img-fluid" src="../../../public/assets/images/{{ figure.image }}"
                                          alt="..."/>

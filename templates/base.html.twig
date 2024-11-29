@@ -22,6 +22,21 @@
 <header>
     {% block header %} {% endblock %}
 </header>
+
+<div class="appflash">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+
+            <div class="notification {{ label }}">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endfor %}
+
+</div>
+
 <main class="flex-shrink-0">
 
     {% block body %}

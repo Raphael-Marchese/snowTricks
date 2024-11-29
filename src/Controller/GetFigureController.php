@@ -2,15 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\FigureRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class GetFigureController extends AbstractController
 {
     #[Route('/figure/{id}', name: 'app_single_figure',requirements: ['id' => '\d+'])]
-    public function index(int $id, FigureRepository $figureRepository): Response
+    public function index(int $id, #[CurrentUser] ?User $user, FigureRepository $figureRepository): Response
     {
         $singleFigure = $figureRepository->find($id);
 
