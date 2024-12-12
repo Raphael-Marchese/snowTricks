@@ -28,19 +28,18 @@ class UpdateFigureController extends AbstractController
     ): Response {
         $figure = $figureRepository->find($id);
 
-        if(!$figure){
+        if (!$figure) {
             return new Response("figure non disponible", 404);
         }
 
-/*        if(!$user) {
-            throw new AccessDeniedHttpException('Vous devez être connecté pour pour modifier une figure');
-        }*/
+        /*        if(!$user) {
+                    throw new AccessDeniedHttpException('Vous devez être connecté pour pour modifier une figure');
+                }*/
 
         $form = $this->createForm(CreateFigureType::class, $figure);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $figure->updatedAt = new \DateTimeImmutable();
             $figure->author = $user ?: $userRepository->find(1);
 
@@ -50,7 +49,7 @@ class UpdateFigureController extends AbstractController
             $this->addFlash('success', 'Votre figure a été modifiée');
 
             return $this->redirectToRoute('app_single_figure', [
-                    'id' => $figure?->id,
+                'id' => $figure?->id,
             ]);
         }
         return $this->render('figure/update.html.twig', [

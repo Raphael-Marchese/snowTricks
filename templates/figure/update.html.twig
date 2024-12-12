@@ -36,11 +36,12 @@
                                     <label for={{ field_name(form.figureGroup) }}>Groupe figure</label>
                                 </div>
 
-                                <ul id="illustrations-list" class="list-unstyled" data-prototype="{{ form_widget(form.illustrations.vars.prototype)|e }}" >
+                                <ul id="illustrations-list" class="list-unstyled"
+                                    data-prototype="{{ form_widget(form.illustrations.vars.prototype)|e }}">
                                     {% do form.illustrations.setRendered() %}
 
                                     {% for illustrationField in form.illustrations %}
-                                        <li >
+                                        <li>
                                             {{ form_widget(illustrationField) }}
                                             {{ form_errors(illustrationField) }}
 
@@ -48,9 +49,12 @@
                                     {% endfor %}
                                 </ul>
 
-                                <button type="button" id="add-illustration-btn" class="btn btn-primary m-3 ">Ajouter une image</button>
+                                <button type="button" id="add-illustration-btn" class="btn btn-primary m-3 ">Ajouter une
+                                    image
+                                </button>
 
-                                <ul id="videos-list" class="list-unstyled" data-prototype="{{ form_widget(form.videos.vars.prototype)|e }}">
+                                <ul id="videos-list" class="list-unstyled"
+                                    data-prototype="{{ form_widget(form.videos.vars.prototype)|e }}">
                                     {% do form.videos.setRendered() %}
 
                                     {% for videoField in form.videos %}
@@ -62,14 +66,16 @@
                                     {% endfor %}
                                 </ul>
 
-                                <button type="button" id="add-video-btn" class="btn btn-primary m-3 ">Ajouter une vidéo</button>
+                                <button type="button" id="add-video-btn" class="btn btn-primary m-3 ">Ajouter une
+                                    vidéo
+                                </button>
 
                                 <!-- Content input-->
                                 <div class="form-floating mb-3">
                                     <textarea class="form-control"
                                               name="{{ field_name(form.description) }}"
                                               value="{{ field_value(form.description) }}"
-                                              placeholder="Description de la figure" style="height: 20rem" ></textarea>
+                                              placeholder="Description de la figure" style="height: 20rem"></textarea>
                                     <label for={{ field_name(form.description) }}>Description</label>
                                 </div>
 
