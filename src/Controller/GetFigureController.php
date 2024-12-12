@@ -12,7 +12,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class GetFigureController extends AbstractController
 {
     #[Route('/figure/{id}', name: 'app_single_figure',requirements: ['id' => '\d+'])]
-    public function index(int $id, #[CurrentUser] ?User $user, FigureRepository $figureRepository): Response
+    public function __invoke(int $id, #[CurrentUser] ?User $user, FigureRepository $figureRepository): Response
     {
         $singleFigure = $figureRepository->find($id);
 

@@ -25,7 +25,6 @@ class CreateFigureController extends AbstractController
         UserRepository $userRepository,
         Request $request,
         #[CurrentUser] ?User $user,
-        FigureRepository $figureRepository,
         #[Autowire('%kernel.project_dir%/public/uploads/illustrations')] string $illustrationsDirectory,
         #[Autowire('%kernel.project_dir%/public/uploads/videos')] string $videosDirectory,
         FilesUploader $filesUploader,
