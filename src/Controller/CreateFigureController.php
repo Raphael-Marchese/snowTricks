@@ -14,12 +14,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class CreateFigureController extends AbstractController
 {
-
     #[Route('/figure/create', name: 'app_create_figure')]
     public function __invoke(
         UserRepository $userRepository,
@@ -34,10 +34,14 @@ class CreateFigureController extends AbstractController
         $form = $this->createForm(CreateFigureType::class, $figure);
         $form->handleRequest($request);
 
+        /*        if(!$user) {
+                    throw new AccessDeniedHttpException('Vous devez être connecté pour pour créer une figure');
+                }*/
+
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $figure = $form->getData();
-                $figure->author = $user ? $user : $userRepository->find(1);
+                $figure->author = $user ?: $userRepository->find(1);
                 $figure->createdAt = new \DateTimeImmutable();
 
                 $illustrations = $form->get('illustrations')->getData();
