@@ -66,6 +66,7 @@ class CreateFigureController extends AbstractController
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Votre figure a été créée');
+
                 return $this->redirectToRoute('app_single_figure', [
                     'id' => $figure->id
                 ]);
