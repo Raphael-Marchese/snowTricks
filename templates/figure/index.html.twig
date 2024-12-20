@@ -132,14 +132,7 @@
                                 <div class="card-body">
                                     <!-- Comment form-->
 {#                                    {% if session and not commentEdit %}
-                                        <form class="mb-4 d-flex gap-2" id="createCommentForm" method="post"
-                                              action="/comment/create/submit">
-                                            <textarea name="content" id="comment-content" class="form-control" rows="3"
-                                                      placeholder="Écrivez ici votre commentaire"></textarea>
-                                            <button class="btn btn-warning btn-sm me-md-2">Commenter</button>
-                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                                            <input type="hidden" name="post_id" value="{{ post.id }}">
-                                        </form>
+
                                     {% endif %}
 
                                     {% if commentEdit %}
@@ -152,7 +145,6 @@
                                                       placeholder="Écrivez ici votre commentaire">{{ editedComment.content|raw }}</textarea>
 
                                             <button class=" btn btn-warning btn-sm me-md-2">Modifier</button>
-                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                                             <input type="hidden" name="post_id" value="{{ post.id }}">
                                             <input type="hidden" name="comment_id" value="{{ editedComment.id }}">
 
@@ -161,6 +153,16 @@
 
                                     <h2>Commentaires</h2>
 
+                                    {{ form_start(form) }}
+                                    <form class="mb-4 d-flex gap-2" >
+                                            <textarea name="{{ field_name(form.content) }}" id="comment-content" value="{{ field_value(form.content) }}" class="form-control" rows="3"
+                                                      placeholder="Écrivez ici votre commentaire"></textarea>
+                                        <input type="hidden" name="figure_id" value="{{ figure.id }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('create_message') }}">
+
+                                        <button class="btn btn-warning  btn-sm me-md-2"  type="submit" formaction="/comment/create">Commenter</button>
+                                    </form>
+                                    {{ form_rest(form) }}
                                     <div class="d-flex flex-column gap-2 ">
                                         {% for comment in comments %}
 
