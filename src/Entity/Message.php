@@ -12,87 +12,27 @@ class Message
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $content = null;
+    public ?string $content = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    public ?\DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updatedAt = null;
+    public ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $author = null;
+    public ?User $author = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false, onDelete:"CASCADE")]
-    private ?Figure $figure = null;
+    #[ORM\JoinColumn(nullable: false)]
+    public ?Figure $figure = null;
 
-    public function getId(): ?int
+    public function __construct()
     {
-        return $this->id;
-    }
-
-    public function getContent(): ?string
-    {
-        return $this->content;
-    }
-
-    public function setContent(string $content): static
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    public function getAuthor(): ?User
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?User $author): static
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    public function getFigure(): ?Figure
-    {
-        return $this->figure;
-    }
-
-    public function setFigure(?Figure $figure): static
-    {
-        $this->figure = $figure;
-
-        return $this;
+        $this->createdAt = new \DateTimeImmutable();
     }
 }

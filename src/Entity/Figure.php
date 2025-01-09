@@ -18,7 +18,7 @@ class Figure
     public ?string $name = null;
 
     #[ORM\Column]
-    public ?\DateTimeImmutable $createdAt = null;
+    public ?\DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]
     public ?\DateTimeImmutable $updatedAt = null;
@@ -39,4 +39,8 @@ class Figure
     #[ORM\JoinColumn(nullable: false)]
     public ?User $author = null;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 }
