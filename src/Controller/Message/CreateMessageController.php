@@ -17,12 +17,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 
 #[AsController]
 class CreateMessageController extends AbstractController
 {
-    #[Route('/comment/create', name: 'create_message', methods: ['POST'])]
+    #[Route('/figure/{id}/comments', name: 'create_message', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[IsCsrfTokenValid('create_message', tokenKey: '_token')]
     public function __invoke(
+        int $id,
         #[CurrentUser] ?User $user,
         MessageRepository $messageRepository,
         FigureRepository $figureRepository,
@@ -30,12 +33,8 @@ class CreateMessageController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager
     ): Response {
-        $figureId = $request->get('figure_id');
-        $figure = $figureRepository->find($figureId);
+        $figure = $figureRepository->find($id);
 
-        if (!$figureId) {
-            throw $this->createNotFoundException('You must provide a figure');
-        }
 
         if (!$user instanceof User) {
             // throw $this->createAccessDeniedException();
@@ -54,14 +53,12 @@ class CreateMessageController extends AbstractController
             $this->addFlash('success', 'Votre figure a été créée');
 
             return $this->redirectToRoute('app_single_figure', [
-                'id' => $figureId
+                'id' => $id,
             ]);
         }
 
-        dd($form->getErrors());
-
         return $this->redirectToRoute('app_single_figure', [
-            'id' => $figureId
+            'id' => $id,
         ]);
     }
 }

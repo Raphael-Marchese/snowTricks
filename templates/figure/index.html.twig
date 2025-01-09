@@ -154,14 +154,12 @@
                                     <h2>Commentaires</h2>
 
                                     {{ form_start(form) }}
-                                    <form class="mb-4 d-flex gap-2" >
                                             <textarea name="{{ field_name(form.content) }}" id="comment-content" value="{{ field_value(form.content) }}" class="form-control" rows="3"
                                                       placeholder="Écrivez ici votre commentaire"></textarea>
                                         <input type="hidden" name="figure_id" value="{{ figure.id }}">
                                         <input type="hidden" name="_token" value="{{ csrf_token('create_message') }}">
 
-                                        <button class="btn btn-warning  btn-sm me-md-2"  type="submit" formaction="/comment/create">Commenter</button>
-                                    </form>
+                                        <button class="btn btn-warning  btn-sm me-md-2"  type="submit" formaction="/figure/{{ figure.id }}/comments">Commenter</button>
                                     {{ form_rest(form) }}
                                     <div class="d-flex flex-column gap-2 ">
                                         {% for comment in comments %}
