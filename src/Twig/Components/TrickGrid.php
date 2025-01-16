@@ -46,7 +46,6 @@ class TrickGrid
     public function getItems(): array
     {
         $figures = $this->figures->paginate($this->page, self::PER_PAGE);
-        $colors = $this->getColors();
 
         $items = [];
         foreach ($figures as $i => $figure) {
@@ -54,30 +53,10 @@ class TrickGrid
                 'id' => $id = ($this->page - 1) * self::PER_PAGE + $i,
                 'name' => $figure->name,
                 'illustrations' => $figure->illustrations,
-                'color' => $colors[$id % \count($colors)],
             ];
         }
 
         return $items;
     }
 
-    public function getColors(): array
-    {
-        return [
-            '#fbf8cc',
-            '#fde4cf',
-            '#ffcfd2',
-            '#f1c0e8',
-            '#cfbaf0',
-            '#a3c4f3',
-            '#90dbf4',
-            '#8eecf5',
-            '#98f5e1',
-            '#b9fbc0',
-            '#b9fbc0',
-            '#ffc9c9',
-            '#d7ffc9',
-            '#c9fffb',
-        ];
-    }
 }
