@@ -11,36 +11,15 @@
                 <p class="lead text-grey mb-4">Contribue toi aussi à notre bibliothèque participative!</p>
             </div>
         </div>
+        <div class="d-flex justify-content-end me-3">
+            <a href="#figures-section" class="position-absolute bottom-0 mb-3 align-items-end  ">
+                <i class="bi bi-arrow-down-circle-fill text-dark" style="font-size: 2rem;"></i>
+            </a>
+        </div>
     </header>
 
-<section class="py-5">
-    <div class="container">
-        <div class="row g-3">
-            {% for figure in figures %}
-                <!-- Utilisation des classes Bootstrap et de la classe personnalisée pour 5 cartes par ligne sur écrans larges -->
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-5th">
-                    <div class="card shadow border-0 h-100">
-                        {% if figure.illustrations %}
-                            <img class="card-img-top"
-                                 src="../../../public/assets/images/{{ figure.illustrations|first }}"
-                                 alt="Photo illustration article"
-                                 style="width: 100%; height: 180px; object-fit: cover;"/>
-                        {% else %}
-                            <img class="card-img-top"
-                                 src="{{ asset('assets/images/indy.webp') }}"
-                                 alt="Photo illustration article"
-                                 style="width: 100%; height: 180px; object-fit: cover;"/>
-                        {% endif %}
-                        <div class="card-body p-4">
-                            <a class="text-decoration-none link-dark stretched-link"
-                               href="{{ '/figure/' ~ figure.id }}">
-                                <h5 class="card-title mb-3">{{ figure.name }}</h5>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
+    <section id="figures-section" class="py-5">
+        {{ component('TrickGrid', { page: 1 }) }}
+    </section>
+
 {% endblock %}
