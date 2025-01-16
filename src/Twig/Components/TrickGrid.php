@@ -50,7 +50,7 @@ class TrickGrid
         $items = [];
         foreach ($figures as $i => $figure) {
             $items[] = [
-                'id' => $id = ($this->page - 1) * self::PER_PAGE + $i,
+                'id' => $figure->id,
                 'name' => $figure->name,
                 'illustrations' => $figure->illustrations,
             ];
