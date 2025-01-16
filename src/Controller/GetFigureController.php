@@ -32,20 +32,12 @@ class GetFigureController extends AbstractController
         $message->figure = $singleFigure;
         $form = $this->createForm(CreateMessageType::class, $message);
 
-
-        $medias = [
-            'https://picsum.photos/id/237/200/300',
-            'https://picsum.photos/seed/picsum/200/300',
-            'https://picsum.photos/200/300/?blur'
-        ];
-
         if (!$singleFigure) {
             throw $this->createNotFoundException('La figure demandée n\'existe pas.');
         }
 
         return $this->render('figure/index.html.twig', [
             'figure' => $singleFigure,
-            'medias' => $medias,
             'comments' => $comments,
             'form' => $form->createView(),
         ]);

@@ -23,42 +23,33 @@
                     <div class="col-lg-9">
                         <!-- Post content-->
                         <article>
-                            <!-- Post header-->
                             <header class="mb-4">
-                                <!-- Post title-->
                                 <h1 class="fw-bolder mb-1">{{ figure.name }}</h1>
                                 <div class="d-flex gap-2">
                                     <h4>Groupe : </h4>
                                     <p class="card-text mb-0">{{ figure.figureGroup|raw }}</p>
                                 </div>
-
-
-                                <!-- Post meta content-->
-                                {% if figure.updatedAt %}
-                                    <div class="text-muted fst-italic mb-2">Mis à jour
-                                        le {{ figure.updatedAt|format_datetime('full', 'short', locale='fr') }}</div>
-                                {% else %}
-                                    <div class="text-muted fst-italic mb-2">{{ figure.createdAt|format_datetime('full', 'short', locale='fr') }}</div>
-                                {% endif %}
+                                <div class="text-muted fst-italic mb-2">
+                                    {% if figure.updatedAt %}
+                                        Mis à jour le {{ figure.updatedAt|format_datetime('full', 'short', locale='fr') }}
+                                    {% else %}
+                                        {{ figure.createdAt|format_datetime('full', 'short', locale='fr') }}
+                                    {% endif %}
+                                </div>
                                 <div class="text-muted">{{ figure.author.username|raw }}</div>
-
-
                             </header>
 
+                            <!-- Zone d'aperçu -->
                             <div class="container mt-4">
-                                <!-- Zone d'aperçu -->
                                 <div id="preview" class="mb-3 text-center">
-                                    <img id="previewImage" src="{{ asset(medias|first) }}" alt="Preview"
-                                         class="img-fluid"
-                                         style="max-height: 400px;">
-                                    <video id="previewVideo" controls class="img-fluid d-none"
-                                           style="max-height: 400px;">
+                                    <img id="previewImage" class="img-fluid d-none" style="max-height: 400px;" alt="Preview">
+                                    <video id="previewVideo" controls class="img-fluid d-none" style="max-height: 400px;">
                                         <source id="videoSource" src="">
                                         Votre navigateur ne supporte pas les vidéos.
                                     </video>
                                 </div>
 
-                                <!-- Liste de vignettes -->
+                                <!-- Flèches et Galerie -->
                                 <div class="d-flex align-items-center">
                                     <!-- Flèche gauche -->
                                     <button class="btn btn-outline-primary" id="arrowLeft">
@@ -66,41 +57,25 @@
                                     </button>
 
                                     <!-- Galerie de vignettes -->
-                                    <div class="flex-grow-1 overflow-auto d-flex" id="thumbnailContainer"
-                                         style="gap: 10px;">
-                                        {% if figure.illustrations %}
-
-                                            {% for image in figure.illustrations %}
-                                                <img
-                                                        src="{{ asset( 'uploads/illustrations/' ~ image ) }}"
-                                                        class="img-thumbnail thumbnail"
-                                                        alt="Image"
-                                                        data-type="image"
-                                                        data-src="{{ asset( 'uploads/illustrations/' ~ image ) }}"
-                                                        style="cursor: pointer; width: 100px; height: 100px;">
-                                                {#                                                <img
-                                                        src="{{ asset(media.thumbnail) }}"
-                                                        class="img-thumbnail thumbnail"
-                                                        alt="Video"
-                                                        data-type="video"
-                                                        data-src="{{ asset(media.url) }}"
-                                                        style="cursor: pointer; height: 100px;"> #}
-                                            {% endfor %}
-                                        {% endif %}
-
-                                        {% if figure.videos %}
-
-                                            {% for video in figure.videos %}
-                                                <video id="previewVideo" controls class="img-fluid d-none"
-                                                       style="max-height: 400px;">
-                                                    <source id="videoSource"
-                                                            src="{{ asset( 'uploads/videos/' ~ video ) }}">
-                                                    Votre navigateur ne supporte pas les vidéos.
-                                                </video>
-                                            {% endfor %}
-                                        {% endif %}
-
-
+                                    <div class="flex-grow-1 overflow-hidden d-flex mx-2" id="thumbnailContainer" style="gap: 10px; overflow-x: auto; scroll-behavior: smooth;">
+                                        {% for image in figure.illustrations %}
+                                            <img src="{{ asset('uploads/illustrations/' ~ image) }}"
+                                                 class="img-thumbnail thumbnail"
+                                                 alt="Image"
+                                                 data-type="image"
+                                                 data-src="{{ asset('uploads/illustrations/' ~ image) }}"
+                                                 style="cursor: pointer; width: 100px; height: 100px;">
+                                        {% endfor %}
+                                        {% for video in figure.videos %}
+                                            <video class="img-thumbnail thumbnail"
+                                                   style="width: 100px; height: 100px; cursor: pointer;"
+                                                   data-type="video"
+                                                   data-src="{{ asset('uploads/videos/' ~ video) }}"
+                                                   controls
+                                                   muted>
+                                                <source src="{{ asset('uploads/videos/' ~ video) }}" type="video/mp4">
+                                            </video>
+                                        {% endfor %}
                                     </div>
 
                                     <!-- Flèche droite -->
@@ -110,17 +85,6 @@
                                 </div>
                             </div>
 
-                            <!-- Preview image figure-->
-                            {#                                                        <figure class="mb-4">
-                                {% if figure.illustrations %}
-                                    <img class="img-fluid" src="../../../public/assets/images/{{ figure.image }}"
-                                         alt="..."/>
-                                {% else %}
-                                    <img class="img-fluid rounded" src="../../../public/assets/websiteUtils/franken.png"
-                                         alt="Photo illustration article"/>
-                                {% endif %}
-                            </figure> #}
-                            <!-- Post content-->
                             <section class="mb-5">
                                 <h1>Description de la figure</h1>
                                 <p class="fs-5 mb-4">{{ figure.description|raw }}</p>
@@ -131,7 +95,7 @@
                             <div class="card bg-light">
                                 <div class="card-body">
                                     <!-- Comment form-->
-{#                                    {% if session and not commentEdit %}
+                                    {#                                    {% if session and not commentEdit %}
 
                                     {% endif %}
 
@@ -149,22 +113,25 @@
                                             <input type="hidden" name="comment_id" value="{{ editedComment.id }}">
 
                                         </form>
-                                    {% endif %}#}
+                                    {% endif %} #}
 
                                     <h2>Commentaires</h2>
 
                                     {{ form_start(form) }}
-                                            <textarea name="{{ field_name(form.content) }}" id="comment-content" value="{{ field_value(form.content) }}" class="form-control" rows="3"
-                                                      placeholder="Écrivez ici votre commentaire"></textarea>
-                                        <input type="hidden" name="figure_id" value="{{ figure.id }}">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('create_message') }}">
+                                    <textarea name="{{ field_name(form.content) }}" id="comment-content"
+                                              value="{{ field_value(form.content) }}" class="form-control" rows="3"
+                                              placeholder="Écrivez ici votre commentaire"></textarea>
+                                    <input type="hidden" name="figure_id" value="{{ figure.id }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('create_message') }}">
 
-                                        <button class="btn btn-warning  btn-sm me-md-2"  type="submit" formaction="/figure/{{ figure.id }}/comments">Commenter</button>
+                                    <button class="btn btn-warning  btn-sm me-md-2" type="submit"
+                                            formaction="/figure/{{ figure.id }}/comments">Commenter
+                                    </button>
                                     {{ form_rest(form) }}
                                     <div class="d-flex flex-column gap-2 ">
                                         {% for comment in comments %}
 
-{#                                            {% if session.user_id == comment.author.id %}
+                                            {#                                            {% if session.user_id == comment.author.id %}
                                                 <div class="d-flex  align-items-center ">
                                                     <div class="flex-shrink-0"><img class="rounded-circle"
                                                                                     style="width: 50px; height: 50px;"
@@ -187,18 +154,18 @@
                                                         <button class="btn btn-danger">Supprimer</button>
                                                     </a>
                                                 </div>
-                                            {% endif %}#}
-                                                <div class="d-flex  align-items-center ">
-                                                    <div class="flex-shrink-0"><img class="rounded-circle"
-                                                                                    style="width: 50px; height: 50px;"
-                                                                                    src="{{ asset('assets/websiteUtils/user.png') }}"
-                                                                                    alt="..."/></div>
-                                                    <div class="fw-bold ms-3">{{ comment.author.username|raw }}</div>
-                                                </div>
-                                                <div class="ms-3">
-                                                    {{ comment.content|raw }}
-                                                </div>
-{#                                                {% if session.user_id == comment.author.id or session.role == 'ROLE_ADMIN' %}
+                                            {% endif %} #}
+                                            <div class="d-flex  align-items-center ">
+                                                <div class="flex-shrink-0"><img class="rounded-circle"
+                                                                                style="width: 50px; height: 50px;"
+                                                                                src="{{ asset('assets/websiteUtils/user.png') }}"
+                                                                                alt="..."/></div>
+                                                <div class="fw-bold ms-3">{{ comment.author.username|raw }}</div>
+                                            </div>
+                                            <div class="ms-3">
+                                                {{ comment.content|raw }}
+                                            </div>
+                                            {#                                                {% if session.user_id == comment.author.id or session.role == 'ROLE_ADMIN' %}
                                                     <div class="d-flex justify-content-end m-3">
                                                         <a href="/comment/{{ comment.id }}/edit">
                                                             <button class="btn btn-secondary me-3">Modifier</button>
@@ -207,7 +174,7 @@
                                                             <button class="btn btn-danger">Supprimer</button>
                                                         </a>
                                                     </div>
-                                                {% endif %}#}
+                                                {% endif %} #}
                                         {% endfor %}
                                     </div>
                                 </div>
@@ -222,35 +189,9 @@
 
 {% block scripts %}
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const thumbnails = document.querySelectorAll('.thumbnail');
-            const previewImage = document.getElementById('previewImage');
 
-            const updatePreview = (src) => {
-                previewImage.src = src;
-            };
-
-            const selectThumbnail = (selected) => {
-                thumbnails.forEach(thumbnail => thumbnail.classList.remove('selected-thumbnail'));
-
-                selected.classList.add('selected-thumbnail');
-            };
-
-            thumbnails.forEach(thumbnail => {
-                thumbnail.addEventListener('click', () => {
-                    const src = thumbnail.dataset.src;
-
-                    updatePreview(src);
-
-                    selectThumbnail(thumbnail);
-                });
-            });
-
-            if (thumbnails.length > 0) {
-                thumbnails[0].classList.add('selected-thumbnail');
-            }
-        });
 
     </script>
 {% endblock %}
+
 
