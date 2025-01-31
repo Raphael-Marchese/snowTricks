@@ -23,31 +23,17 @@
                     <div class="col-lg-9">
                         <!-- Post content-->
                         <article class="d-none d-md-block">
-                        <article>
                             <header class="mb-4">
                                 <h1 class="fw-bolder mb-1 text-center">{{ figure.name|capitalize }}</h1>
-                                <h1 class="fw-bolder mb-1">{{ figure.name }}</h1>
-                                <div class="d-flex gap-2">
-                                    <h4>Groupe : </h4>
-                                    <p class="card-text mb-0">{{ figure.figureGroup|raw }}</p>
-                                </div>
-                                <div class="text-muted fst-italic mb-2">
-                                    {% if figure.updatedAt %}
-                                        Mis à jour le {{ figure.updatedAt|format_datetime('full', 'short', locale='fr') }}
-                                    {% else %}
-                                        {{ figure.createdAt|format_datetime('full', 'short', locale='fr') }}
-                                    {% endif %}
-                                </div>
-                                <div class="text-muted">{{ figure.author.username|raw }}</div>
                             </header>
 
                             <!-- Zone d'aperçu -->
                             <div class="container mt-4 ">
-                            <!-- Zone d'aperçu -->
-                            <div class="container mt-4">
                                 <div id="preview" class="mb-3 text-center">
-                                    <img id="previewImage" class="img-fluid d-none" style="max-height: 400px;" alt="Preview">
-                                    <video id="previewVideo" controls class="img-fluid d-none" style="max-height: 400px;">
+                                    <img id="previewImage" class="img-fluid d-none" style="max-height: 400px;"
+                                         alt="Preview">
+                                    <video id="previewVideo" controls class="img-fluid d-none"
+                                           style="max-height: 400px;">
                                         <source id="videoSource" src="">
                                         Votre navigateur ne supporte pas les vidéos.
                                     </video>
@@ -61,7 +47,8 @@
                                     </button>
 
                                     <!-- Galerie de vignettes -->
-                                    <div class="flex-grow-1 overflow-hidden d-flex mx-2" id="thumbnailContainer" style="gap: 10px; overflow-x: auto; scroll-behavior: smooth;">
+                                    <div class="flex-grow-1 overflow-hidden d-flex mx-2" id="thumbnailContainer"
+                                         style="gap: 10px; overflow-x: auto; scroll-behavior: smooth;">
                                         {% for image in figure.illustrations %}
                                             <img src="{{ asset('uploads/illustrations/' ~ image) }}"
                                                  class="img-thumbnail thumbnail"
@@ -89,10 +76,82 @@
                                 </div>
                             </div>
 
-                            <section class="mb-5">
+                            <section class="mb-3">
                                 <h1>Description de la figure</h1>
                                 <p class="fs-5 mb-4">{{ figure.description|raw }}</p>
+                                <div class="text-muted text-end">Auteur : {{ figure.author.username|raw }}</div>
                             </section>
+                            <section>
+                                <div class="d-flex gap-2">
+                                    <h5>Groupe : <span class="badge bg-secondary">{{ figure.figureGroup|raw|capitalize }}</span></h5>
+                                </div>
+                                <div class="text-muted fst-italic mb-2">
+                                    {% if figure.updatedAt %}
+                                        Dernière mise à le {{ figure.updatedAt|format_datetime('full', 'short', locale='fr') }}
+                                    {% else %}
+                                       Créé le  {{ figure.createdAt|format_datetime('full', 'short', locale='fr') }}
+                                    {% endif %}
+                                </div>
+                            </section>
+                        </article>
+
+                        <!-- Mobile view -->
+                        <article class="d-block d-md-none">
+                            {% if figure.illustrations %}
+                            <header class="bg-white position-relative d-flex align-items-center justify-content-center mb-2"
+                                    style="background-image: url('{{ asset('uploads/illustrations/' ~ figure.illustrations[0]) }}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 30vh;">
+                                {% elseif figure.videos %}
+                                <header class="bg-white position-relative d-flex align-items-center justify-content-center mb-2"
+                                        style="background-image: url('{{ asset('uploads/illustrations/' ~ figure.videos[0]) }}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 30vh;">
+                                    {% else %}
+                                    <header class="bg-white position-relative d-flex align-items-center justify-content-center mb-2"
+                                            style="background-image: url('{{ asset('assets/websiteUtils/homepage_picture.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 30vh;">
+                                        {% endif %}
+                                        <div class="container text-center position-relative" style="z-index: 1;">
+                                            <div class="overlay-text position-relative d-inline-block px-4 py-3">
+                                                <h1 class="display-5 fw-bold text-dark mb-2">{{ figure.name }}</h1>
+                                            </div>
+                                        </div>
+                                    </header>
+                                    <p class="d-flex justify-content-center flex-column">
+                                        <button class="btn btn-primary mx-3" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseExample" aria-expanded="false"
+                                                aria-controls="collapseExample">
+                                            Voir les médias
+                                        </button>
+                                    </p>
+
+                                    <div class="collapse" id="collapseExample">
+                                        {% for image in figure.illustrations %}
+                                            <img src="{{ asset('uploads/illustrations/' ~ image) }}"
+                                                 class="img-thumbnail thumbnail mb-2"
+                                                 alt="Image"
+                                                 data-type="image"
+                                                 data-src="{{ asset('uploads/illustrations/' ~ image) }}"
+                                                 style="cursor: pointer; width: 100%">
+                                        {% endfor %}
+                                        {% for video in figure.videos %}
+                                            <video class="img-thumbnail thumbnail mb-2"
+                                                   style="width: 100%; cursor: pointer;"
+                                                   data-type="video"
+                                                   data-src="{{ asset('uploads/videos/' ~ video) }}"
+                                                   controls
+                                                   muted>
+                                                <source src="{{ asset('uploads/videos/' ~ video) }}" type="video/mp4">
+                                            </video>
+                                        {% endfor %}
+                                    </div>
+                                    <section class="d-flex flex-column mx-2">
+                                        <h1 class="align-self-center">Description</h1>
+                                        <p class="fs-6 ">{{ figure.description|raw }}</p>
+                                        <span class="badge text-bg-secondary w-25 "> {{ figure.figureGroup|raw }}</span>
+                                        <p class="fs-6 fw-lighter fst-italic mt-2"> créé le
+                                            : {{ figure.createdAt|format_datetime('full', 'short', locale='fr') }}</p>
+                                        {% if figure.updatedAt %}
+                                            Dernière mise à jour le {{ figure.updatedAt|format_datetime('full', 'short', locale='fr') }}
+                                        {% endif %}
+                                    </section>
+
                         </article>
                         <!-- Comments section-->
                         <section>
@@ -117,7 +176,7 @@
                                             <input type="hidden" name="comment_id" value="{{ editedComment.id }}">
 
                                         </form>
-                                    {% endif %}#}
+                                    {% endif %} #}
 
                                     <h2>Commentaires</h2>
 
@@ -190,12 +249,3 @@
         </section>
     </main>
 {% endblock %}
-
-{% block scripts %}
-    <script>
-
-
-    </script>
-{% endblock %}
-
-
