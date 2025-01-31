@@ -20,9 +20,6 @@
                             <div class="ms-3">
                                 {{ item.content|raw }}
                             </div>
-                        <p class="ms-3 fw-lighter fst-italic small">
-                            {{ item.createdAt|format_datetime('short', 'short', locale='fr') }}
-                        </p>
                     </div>
                 {% endfor %}
             </div>
@@ -37,14 +34,14 @@
                 </button>
             {% endif %}
         </div>
-{#        {% if  this.getMessageNumber() >= 5 %}
+        {% if  this.getMessageNumber() >= 5 %}
             <div class="d-flex justify-content-end me-3">
                 <button id="backToTop" style="border: none; background: none; padding: 0; cursor: pointer;"
                         onclick="scrollToFiguresSection()">
                     <i class="bi bi-arrow-up-circle-fill text-dark" style="font-size: 2rem;"></i>
                 </button>
             </div>
-        {% endif %}#}
+        {% endif %}
     </div>
 
 

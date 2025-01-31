@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Twig\Components;
 
-use App\Repository\MessageRepository;
 use App\Service\MessageCollection;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
@@ -23,9 +22,6 @@ class MessageGrid
     #[LiveProp]
     public int $page = 1;
 
-    #[LiveProp]
-    public int $figureId;
-
     public function __construct(private readonly MessageCollection $messages)
     {
     }
@@ -43,14 +39,12 @@ class MessageGrid
 
     public function hasMore(): bool
     {
-        $filteredMessages = $this->messages->loadForFigure($this->figureId);
-
-        return \count($filteredMessages) > ($this->page * self::PER_PAGE);
+        return \count($this->messages) > ($this->page * self::PER_PAGE);
     }
 
     public function getItems(): array
     {
-        $messages = $this->messages->loadForFigure($this->figureId)->paginate($this->page, self::PER_PAGE);
+        $messages = $this->messages->paginate($this->page, self::PER_PAGE);
 
         $items = [];
         foreach ($messages as $i => $message) {

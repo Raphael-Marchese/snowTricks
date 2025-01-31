@@ -30,25 +30,12 @@ class MessageCollection implements \IteratorAggregate, \Countable
         return \count($this->messages);
     }
 
-    private function loadMessages(?int $figureId = null): array
+    private function loadMessages(): array
     {
         if ($this->messageRepository === null) {
-            throw new \LogicException('MessageRepository is required to load messages dynamically.');
-        }
-
-        if ($figureId !== null) {
-            return $this->messageRepository->findBy(['figure' => $figureId], ['createdAt' => 'DESC']);
+            throw new \LogicException('MessageRepository is required to load messagess dynamically.');
         }
 
         return $this->messageRepository->findAll();
     }
-
-    public function loadForFigure(int $figureId): self
-    {
-        return new self(
-            $this->loadMessages($figureId),
-            $this->messageRepository
-        );
-    }
-
 }
