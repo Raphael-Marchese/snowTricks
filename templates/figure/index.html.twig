@@ -83,14 +83,106 @@
                             </section>
                             <section>
                                 <div class="d-flex gap-2">
-                                    <h5>Groupe : <span class="badge bg-secondary">{{ figure.figureGroup|raw|capitalize }}</span></h5>
+                                    <h5>Groupe : <span
+                                                class="badge bg-secondary">{{ figure.figureGroup|raw|capitalize }}</span>
+                                    </h5>
                                 </div>
                                 <div class="text-muted fst-italic mb-2">
                                     {% if figure.updatedAt %}
                                         Dernière mise à le {{ figure.updatedAt|format_datetime('full', 'short', locale='fr') }}
                                     {% else %}
-                                       Créé le  {{ figure.createdAt|format_datetime('full', 'short', locale='fr') }}
+                                        Créé le  {{ figure.createdAt|format_datetime('full', 'short', locale='fr') }}
                                     {% endif %}
+                                </div>
+                            </section>
+                            <!-- Comments section-->
+                            <section>
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <!-- Comment form-->
+                                        {#                                    {% if session and not commentEdit %}
+
+                                    {% endif %}
+
+                                    {% if commentEdit %}
+                                        <h2>Modification du commentaire</h2>
+                                        <form class="mb-4 d-flex gap-2" id="editCommentForm" method="post"
+                                              action="/comment/{{ editedComment.id }}/edit/submit">
+                                            <label for="edit-comment-content"></label>
+                                            <textarea name="content" id="edit-comment-content" class="form-control"
+                                                      rows="3"
+                                                      placeholder="Écrivez ici votre commentaire">{{ editedComment.content|raw }}</textarea>
+
+                                            <button class=" btn btn-warning btn-sm me-md-2">Modifier</button>
+                                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                                            <input type="hidden" name="comment_id" value="{{ editedComment.id }}">
+
+                                        </form>
+                                    {% endif %} #}
+
+                                        <h2>Commentaires</h2>
+
+                                        {{ form_start(form) }}
+                                        <textarea name="{{ field_name(form.content) }}" id="comment-content"
+                                                  value="{{ field_value(form.content) }}" class="form-control" rows="3"
+                                                  placeholder="Écrivez ici votre commentaire"></textarea>
+                                        <input type="hidden" name="figure_id" value="{{ figure.id }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('create_message') }}">
+
+                                        <button class="btn btn-warning  btn-sm me-md-2" type="submit"
+                                                formaction="/figure/{{ figure.id }}/comments">Commenter
+                                        </button>
+                                        {{ form_rest(form) }}
+                                        <div class="d-flex flex-column gap-2 ">
+                                            {% for comment in comments %}
+
+                                                {#                                            {% if session.user_id == comment.author.id %}
+                                                <div class="d-flex  align-items-center ">
+                                                    <div class="flex-shrink-0"><img class="rounded-circle"
+                                                                                    style="width: 50px; height: 50px;"
+                                                                                    src="../../../public/assets/websiteUtils/user.png"
+                                                                                    alt="..."/></div>
+                                                    <div class="fw-bold ms-3 text-muted">{{ comment.author.username|raw }}</div>
+                                                </div>
+                                                <div class="ms-3 text-muted">
+                                                    {{ comment.content|raw }}
+                                                </div>
+
+                                                <div class="ms-3 text-info">
+                                                    Votre commentaire doit être validé pour apparaitre en ligne
+                                                </div>
+                                                <div class="d-flex justify-content-end m-3">
+                                                    <a href="/comment/{{ comment.id }}/edit">
+                                                        <button class="btn btn-secondary me-3">Modifier</button>
+                                                    </a>
+                                                    <a href="/comment/{{ comment.id }}/delete">
+                                                        <button class="btn btn-danger">Supprimer</button>
+                                                    </a>
+                                                </div>
+                                            {% endif %} #}
+                                                <div class="d-flex  align-items-center ">
+                                                    <div class="flex-shrink-0"><img class="rounded-circle"
+                                                                                    style="width: 50px; height: 50px;"
+                                                                                    src="{{ asset('assets/websiteUtils/user.png') }}"
+                                                                                    alt="..."/></div>
+                                                    <div class="fw-bold ms-3">{{ comment.author.username|raw }}</div>
+                                                </div>
+                                                <div class="ms-3">
+                                                    {{ comment.content|raw }}
+                                                </div>
+                                                {#                                                {% if session.user_id == comment.author.id or session.role == 'ROLE_ADMIN' %}
+                                                    <div class="d-flex justify-content-end m-3">
+                                                        <a href="/comment/{{ comment.id }}/edit">
+                                                            <button class="btn btn-secondary me-3">Modifier</button>
+                                                        </a>
+                                                        <a href="/comment/{{ comment.id }}/delete">
+                                                            <button class="btn btn-danger">Supprimer</button>
+                                                        </a>
+                                                    </div>
+                                                {% endif %} #}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
                                 </div>
                             </section>
                         </article>
@@ -151,14 +243,12 @@
                                             Dernière mise à jour le {{ figure.updatedAt|format_datetime('full', 'short', locale='fr') }}
                                         {% endif %}
                                     </section>
-
-                        </article>
-                        <!-- Comments section-->
-                        <section>
-                            <div class="card bg-light">
-                                <div class="card-body">
-                                    <!-- Comment form-->
-                                    {#                                    {% if session and not commentEdit %}
+                                    <!-- Mobile Comments section-->
+                                    <section>
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <!-- Comment form-->
+                                                {#                                    {% if session and not commentEdit %}
 
                                     {% endif %}
 
@@ -178,71 +268,42 @@
                                         </form>
                                     {% endif %} #}
 
-                                    <h2>Commentaires</h2>
+                                                <h2 class="text-center">Commentaires</h2>
+                                                <p class="d-flex justify-content-center flex-column">
+                                                    <button class="btn btn-primary mx-3" type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#collapseComment" aria-expanded="false"
+                                                            aria-controls="collapseComment">
+                                                        Écrire un commentaire
+                                                    </button>
+                                                </p>
 
-                                    {{ form_start(form) }}
-                                    <textarea name="{{ field_name(form.content) }}" id="comment-content"
-                                              value="{{ field_value(form.content) }}" class="form-control" rows="3"
-                                              placeholder="Écrivez ici votre commentaire"></textarea>
-                                    <input type="hidden" name="figure_id" value="{{ figure.id }}">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('create_message') }}">
-
-                                    <button class="btn btn-warning  btn-sm me-md-2" type="submit"
-                                            formaction="/figure/{{ figure.id }}/comments">Commenter
-                                    </button>
-                                    {{ form_rest(form) }}
-                                    <div class="d-flex flex-column gap-2 ">
-                                        {% for comment in comments %}
-
-                                            {#                                            {% if session.user_id == comment.author.id %}
-                                                <div class="d-flex  align-items-center ">
-                                                    <div class="flex-shrink-0"><img class="rounded-circle"
-                                                                                    style="width: 50px; height: 50px;"
-                                                                                    src="../../../public/assets/websiteUtils/user.png"
-                                                                                    alt="..."/></div>
-                                                    <div class="fw-bold ms-3 text-muted">{{ comment.author.username|raw }}</div>
-                                                </div>
-                                                <div class="ms-3 text-muted">
-                                                    {{ comment.content|raw }}
-                                                </div>
-
-                                                <div class="ms-3 text-info">
-                                                    Votre commentaire doit être validé pour apparaitre en ligne
-                                                </div>
-                                                <div class="d-flex justify-content-end m-3">
-                                                    <a href="/comment/{{ comment.id }}/edit">
-                                                        <button class="btn btn-secondary me-3">Modifier</button>
-                                                    </a>
-                                                    <a href="/comment/{{ comment.id }}/delete">
-                                                        <button class="btn btn-danger">Supprimer</button>
-                                                    </a>
-                                                </div>
-                                            {% endif %} #}
-                                            <div class="d-flex  align-items-center ">
-                                                <div class="flex-shrink-0"><img class="rounded-circle"
-                                                                                style="width: 50px; height: 50px;"
-                                                                                src="{{ asset('assets/websiteUtils/user.png') }}"
-                                                                                alt="..."/></div>
-                                                <div class="fw-bold ms-3">{{ comment.author.username|raw }}</div>
-                                            </div>
-                                            <div class="ms-3">
-                                                {{ comment.content|raw }}
-                                            </div>
-                                            {#                                                {% if session.user_id == comment.author.id or session.role == 'ROLE_ADMIN' %}
-                                                    <div class="d-flex justify-content-end m-3">
-                                                        <a href="/comment/{{ comment.id }}/edit">
-                                                            <button class="btn btn-secondary me-3">Modifier</button>
-                                                        </a>
-                                                        <a href="/comment/{{ comment.id }}/delete">
-                                                            <button class="btn btn-danger">Supprimer</button>
-                                                        </a>
+                                                <div class="collapse" id="collapseComment">
+                                                    {{ form_start(form) }}
+                                                    <textarea name="{{ field_name(form.content) }}" id="comment-content"
+                                                              value="{{ field_value(form.content) }}"
+                                                              class="form-control" rows="3"
+                                                              placeholder="Écrivez ici votre commentaire"></textarea>
+                                                    <input type="hidden" name="figure_id" value="{{ figure.id }}">
+                                                    <input type="hidden" name="_token"
+                                                           value="{{ csrf_token('create_message') }}">
+                                                    <div class="d-flex justify-content-center">
+                                                        <button class="btn btn-warning btn-sm my-2" type="submit"
+                                                                formaction="/figure/{{ figure.id }}/comments">Commenter
+                                                        </button>
                                                     </div>
-                                                {% endif %} #}
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
+
+                                                    {{ form_rest(form) }}
+                                                </div>
+                                                <!-- TO DO : FILTER BY FIGURE ID -->
+                                                <section id="messages-section" class="py-5">
+                                                    {{ component('MessageGrid', { page: 1 }) }}
+                                                </section>
+                                            </div>
+                                        </div>
+                                    </section>
+                        </article>
+
                     </div>
                 </div>
             </div>
