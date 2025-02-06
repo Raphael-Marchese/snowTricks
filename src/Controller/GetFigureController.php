@@ -26,7 +26,7 @@ class GetFigureController extends AbstractController
     ): Response {
         $singleFigure = $figureRepository->find($id);
 
-        $comments = $messageRepository->findBy(['figure' => $singleFigure]);
+        $comments = $messageRepository->findBy(['figure' => $singleFigure], ['createdAt' => 'DESC']);
 
         $message = new Message();
         $message->figure = $singleFigure;

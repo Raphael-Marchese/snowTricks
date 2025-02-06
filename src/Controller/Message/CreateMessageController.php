@@ -22,7 +22,7 @@ use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 #[AsController]
 class CreateMessageController extends AbstractController
 {
-    #[Route('/figure/{id}/comments', name: 'create_message', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[Route('/figure/{id}/comments', requirements: ['id' => '\d+'], methods: ['POST'])]
     #[IsCsrfTokenValid('create_message', tokenKey: '_token')]
     public function __invoke(
         int $id,
@@ -42,6 +42,7 @@ class CreateMessageController extends AbstractController
         $message = new Message();
         $form = $this->createForm(CreateMessageType::class, $message);
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $message = $form->getData();
