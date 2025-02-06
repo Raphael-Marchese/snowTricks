@@ -1,0 +1,60 @@
+<div class="TrickGrid" {{ attributes }}>
+
+    {% if page > 1 %}
+        {# 🦊 #}
+        {# Adding a fake "previous page" div is enough to trick the system #}
+        {# It must have the same ID than the original page #}
+        <div class="TrickGrid_page" id="page--{{ page - 1 }}" data-live-ignore="true"></div>
+    {% endif %}
+
+    {# Current page #}
+    <div class="TrickGrid_page" id="page--{{ page }}" data-live-ignore="true">
+        <div class="container">
+            <div class="row g-3 mt-3">
+                {% for item in this.items %}
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-5th">
+                        <div class="card shadow border-0 h-100">
+                            {% if item.illustrations %}
+                                <img class="card-img-top"
+                                     src="../../../public/assets/images/{{ item.illustrations|first }}"
+                                     alt="Photo illustration article"
+                                     style="width: 100%; height: 180px; object-fit: cover;"/>
+                            {% else %}
+                                <img class="card-img-top"
+                                     src="{{ asset('assets/images/indy.webp') }}"
+                                     alt="Photo illustration article"
+                                     style="width: 100%; height: 180px; object-fit: cover;"/>
+                            {% endif %}
+                            <div class="card-body p-4">
+                                <a class="text-decoration-none link-dark stretched-link"
+                                   href="{{ '/figure/' ~ item.id }}">
+                                    <h5 class="card-title mb-3">{{ item.name }}</h5>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="d-flex justify-content-center m-3">
+            {% if this.hasMore %}
+                <button data-action="live#action" data-live-action-param="more" class="TrickGrid_more">
+                    Load More
+                </button>
+            {% endif %}
+        </div>
+        {% if  this.getFigureNumber() >= 15 %}
+            <div class="d-flex justify-content-end me-3">
+                <button id="backToTop" style="border: none; background: none; padding: 0; cursor: pointer;"
+                        onclick="scrollToFiguresSection()">
+                    <i class="bi bi-arrow-up-circle-fill text-dark" style="font-size: 2rem;"></i>
+                </button>
+            </div>
+        {% endif %}
+    </div>
+
+
+</div>
