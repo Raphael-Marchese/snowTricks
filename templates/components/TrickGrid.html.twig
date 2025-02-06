@@ -16,7 +16,7 @@
                         <div class="card shadow border-0 h-100">
                             {% if item.illustrations %}
                                 <img class="card-img-top"
-                                     src="../../../public/assets/images/{{ item.illustrations|first }}"
+                                     src="{{ asset('uploads/illustrations/') ~ item.illustrations|first }}"
                                      alt="Photo illustration article"
                                      style="width: 100%; height: 180px; object-fit: cover;"/>
                             {% else %}

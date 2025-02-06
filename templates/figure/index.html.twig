@@ -123,15 +123,15 @@
                                         <h2>Commentaires</h2>
 
                                         {{ form_start(form) }}
-                                        <textarea name="{{ field_name(form.content) }}" id="comment-content"
-                                                  value="{{ field_value(form.content) }}" class="form-control" rows="3"
-                                                  placeholder="Écrivez ici votre commentaire"></textarea>
+                                        {{ form_row(form.content) }}
                                         <input type="hidden" name="figure_id" value="{{ figure.id }}">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('create_message') }}">
 
-                                        <button class="btn btn-warning  btn-sm me-md-2" type="submit"
-                                                formaction="/figure/{{ figure.id }}/comments">Commenter
-                                        </button>
+                                        <div class="d-flex justify-content-end my-2 ">
+                                            <button class="btn btn-warning  btn-sm me-md-2" type="submit"
+                                                    formaction="/figure/{{ figure.id }}/comments">Commenter
+                                            </button>
+                                        </div>
+
                                         {{ form_rest(form) }}
                                         <div class="d-flex flex-column gap-2 ">
                                             {% for comment in comments %}
@@ -170,6 +170,9 @@
                                                 <div class="ms-3">
                                                     {{ comment.content|raw }}
                                                 </div>
+                                                <p class=" me-2 fw-lighter fst-italic small">
+                                                    {{ comment.createdAt|format_datetime('short', 'short', locale='fr') }}
+                                                </p>
                                                 {#                                                {% if session.user_id == comment.author.id or session.role == 'ROLE_ADMIN' %}
                                                     <div class="d-flex justify-content-end m-3">
                                                         <a href="/comment/{{ comment.id }}/edit">
@@ -295,9 +298,8 @@
 
                                                     {{ form_rest(form) }}
                                                 </div>
-                                                <!-- TO DO : FILTER BY FIGURE ID -->
-                                                <section id="messages-section" class="py-5">
-                                                    {{ component('MessageGrid', { page: 1 }) }}
+                                                <section id="messages-section" class="py-1">
+                                                    {{ component('MessageGrid', { page: 1, figureId: figure.id }) }}
                                                 </section>
                                             </div>
                                         </div>
