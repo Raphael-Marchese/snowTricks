@@ -26,7 +26,7 @@ class CreateMessageController extends AbstractController
     #[IsCsrfTokenValid('create_message', tokenKey: '_token')]
     public function __invoke(
         int $id,
-        #[CurrentUser] ?User $user,
+  //      #[CurrentUser] ?User $user,
         MessageRepository $messageRepository,
         FigureRepository $figureRepository,
         UserRepository $userRepository,
@@ -35,14 +35,12 @@ class CreateMessageController extends AbstractController
     ): Response {
         $figure = $figureRepository->find($id);
 
-
-        if (!$user instanceof User) {
+       // if (!$user instanceof User) {
             // throw $this->createAccessDeniedException();
-        }
+      //  }
         $message = new Message();
         $form = $this->createForm(CreateMessageType::class, $message);
         $form->handleRequest($request);
-
 
         if ($form->isSubmitted() && $form->isValid()) {
             $message = $form->getData();

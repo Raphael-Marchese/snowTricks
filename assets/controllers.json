@@ -20,13 +20,5 @@
             }
         }
     },
-    "entrypoints": [],
-
-    "controllers/back-to-top.js": {
-        "output": "back-to-top.js"
-    },
-
-    "styles/back-to-top.css": {
-        "output": "back-to-top.css"
-    }
+    "entrypoints": []
 }

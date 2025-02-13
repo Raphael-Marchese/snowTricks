@@ -125,6 +125,7 @@
                                         {{ form_start(form) }}
                                         {{ form_row(form.content) }}
                                         <input type="hidden" name="figure_id" value="{{ figure.id }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('create-message') }}">
 
                                         <div class="d-flex justify-content-end my-2 ">
                                             <button class="btn btn-warning  btn-sm me-md-2" type="submit"
