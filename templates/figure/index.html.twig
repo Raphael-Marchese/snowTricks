@@ -2,19 +2,6 @@
 
 {% block body %}
     <main class="flex-shrink-0">
-        {#            <div class="d-flex justify-content-end m-3">
-                {% if session.user_id == post.author.id %}
-                    <a href="/post/{{ post.id }}/edit">
-                    <button class="btn btn-secondary me-3">Modifier</button>
-                </a>
-                {% endif %}
-                {% if session.user_id == post.author.id or session.role == 'ROLE_ADMIN' %}
-                <a href="/post/{{ post.id }}/delete">
-                    <button class="btn btn-danger">Supprimer</button>
-                </a>
-                {% endif %}
-            </div> #}
-
 
         <!-- Page Content-->
         <section class="py-md-5 ">
@@ -25,18 +12,20 @@
                         <article class="d-none d-md-block">
                             <header class="mb-4">
                                 <h1 class="fw-bolder mb-1 text-center">{{ figure.name|capitalize }}</h1>
-                                <div class="action-buttons d-flex gap-2 justify-content-end m-2">
-                                    <a href="{{ '/update/figure/' ~ figure.id }}" style="position: relative;">
-                                        <button class="btn btn-secondary btn-icon" title="Modifier">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                    </a>
-                                    <a href="{{ '/delete/figure/' ~ figure.id }}" style="position: relative;">
-                                        <button class="btn btn-danger btn-icon" title="Supprimer">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </a>
-                                </div>
+                                {% if app.user %}
+                                    <div class="action-buttons d-flex gap-2 justify-content-end m-2">
+                                        <a href="{{ '/update/figure/' ~ figure.id }}" style="position: relative;">
+                                            <button class="btn btn-secondary btn-icon" title="Modifier">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                        </a>
+                                        <a href="{{ '/delete/figure/' ~ figure.id }}" style="position: relative;">
+                                            <button class="btn btn-danger btn-icon" title="Supprimer">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </a>
+                                    </div>
+                                {% endif %}
                             </header>
 
                             <!-- Zone d'aperçu -->
@@ -62,31 +51,32 @@
                                     <div class="flex-grow-1 overflow-hidden d-flex mx-2" id="thumbnailContainer"
                                          style="gap: 10px; overflow-x: auto; scroll-behavior: smooth;">
                                         {% if  figure.illustrations or figure.videos %}
-                                        {% for image in figure.illustrations %}
-                                            <img src="{{ asset('uploads/illustrations/' ~ image) }}"
+                                            {% for image in figure.illustrations %}
+                                                <img src="{{ asset('uploads/illustrations/' ~ image) }}"
+                                                     class="img-thumbnail thumbnail"
+                                                     alt="Image"
+                                                     data-type="image"
+                                                     data-src="{{ asset('uploads/illustrations/' ~ image) }}"
+                                                     style="cursor: pointer; width: 100px; height: 100px;">
+                                            {% endfor %}
+                                            {% for video in figure.videos %}
+                                                <video class="img-thumbnail thumbnail"
+                                                       style="width: 100px; height: 100px; cursor: pointer;"
+                                                       data-type="video"
+                                                       data-src="{{ asset('uploads/videos/' ~ video) }}"
+                                                       controls
+                                                       muted>
+                                                    <source src="{{ asset('uploads/videos/' ~ video) }}"
+                                                            type="video/mp4">
+                                                </video>
+                                            {% endfor %}
+                                        {% else %}
+                                            <img src="{{ asset('assets/images/indy.webp') }}"
                                                  class="img-thumbnail thumbnail"
                                                  alt="Image"
                                                  data-type="image"
-                                                 data-src="{{ asset('uploads/illustrations/' ~ image) }}"
+                                                 data-src="{{ asset('assets/images/indy.webp') }}"
                                                  style="cursor: pointer; width: 100px; height: 100px;">
-                                        {% endfor %}
-                                        {% for video in figure.videos %}
-                                            <video class="img-thumbnail thumbnail"
-                                                   style="width: 100px; height: 100px; cursor: pointer;"
-                                                   data-type="video"
-                                                   data-src="{{ asset('uploads/videos/' ~ video) }}"
-                                                   controls
-                                                   muted>
-                                                <source src="{{ asset('uploads/videos/' ~ video) }}" type="video/mp4">
-                                            </video>
-                                        {% endfor %}
-                                        {% else %}
-                                        <img src="{{ asset('assets/images/indy.webp') }}"
-                                             class="img-thumbnail thumbnail"
-                                             alt="Image"
-                                             data-type="image"
-                                             data-src="{{ asset('assets/images/indy.webp') }}"
-                                             style="cursor: pointer; width: 100px; height: 100px;">
                                         {% endif %}
 
                                     </div>
@@ -145,18 +135,19 @@
                                         <h2>Commentaires</h2>
 
                                         {% if app.user %}
-                                        {{ form_start(form) }}
-                                        {{ form_row(form.content) }}
-                                        <input type="hidden" name="figure_id" value="{{ figure.id }}">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('create_message') }}">
+                                            {{ form_start(form) }}
+                                            {{ form_row(form.content) }}
+                                            <input type="hidden" name="figure_id" value="{{ figure.id }}">
+                                            <input type="hidden" name="_token"
+                                                   value="{{ csrf_token('create_message') }}">
 
-                                        <div class="d-flex justify-content-end my-2 ">
-                                            <button class="btn btn-warning  btn-sm me-md-2" type="submit"
-                                                    formaction="/figure/{{ figure.id }}/comments">Commenter
-                                            </button>
-                                        </div>
+                                            <div class="d-flex justify-content-end my-2 ">
+                                                <button class="btn btn-warning  btn-sm me-md-2" type="submit"
+                                                        formaction="/figure/{{ figure.id }}/comments">Commenter
+                                                </button>
+                                            </div>
 
-                                        {{ form_end(form) }}
+                                            {{ form_end(form) }}
                                         {% endif %}
                                         <div class="d-flex flex-column gap-2 ">
                                             {% for comment in comments %}
