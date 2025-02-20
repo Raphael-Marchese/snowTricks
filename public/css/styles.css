@@ -36,6 +36,25 @@
     border-radius: 5px; /* Même arrondi que les vignettes */
 }
 
+.btn-icon {
+    width: 36px; /* Taille fixe pour la largeur */
+    height: 36px; /* Taille fixe pour la hauteur */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; /* Supprime les marges internes */
+    font-size: 16px; /* Taille des icônes */
+    line-height: 1; /* Uniformise l'espacement vertical */
+}
+
+.btn-icon i {
+    pointer-events: none; /* Empêche l'icône de capturer les clics */
+}
+
+.d-flex.gap-2 .btn-icon {
+    flex-shrink: 0; /* Empêche les boutons de s'étendre en hauteur */
+}
+
 @media (max-width: 576px) {
     /* Mobile (petits écrans) */
     body {
@@ -55,4 +74,5 @@
     body {
         font-size: 18px;
     }
+
 }

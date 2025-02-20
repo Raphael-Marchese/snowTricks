@@ -25,6 +25,18 @@
                         <article class="d-none d-md-block">
                             <header class="mb-4">
                                 <h1 class="fw-bolder mb-1 text-center">{{ figure.name|capitalize }}</h1>
+                                <div class="action-buttons d-flex gap-2 justify-content-end m-2">
+                                    <a href="{{ '/update/figure/' ~ figure.id }}" style="position: relative;">
+                                        <button class="btn btn-secondary btn-icon" title="Modifier">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                    </a>
+                                    <a href="{{ '/delete/figure/' ~ figure.id }}" style="position: relative;">
+                                        <button class="btn btn-danger btn-icon" title="Supprimer">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </a>
+                                </div>
                             </header>
 
                             <!-- Zone d'aperçu -->
@@ -49,6 +61,7 @@
                                     <!-- Galerie de vignettes -->
                                     <div class="flex-grow-1 overflow-hidden d-flex mx-2" id="thumbnailContainer"
                                          style="gap: 10px; overflow-x: auto; scroll-behavior: smooth;">
+                                        {% if  figure.illustrations or figure.videos %}
                                         {% for image in figure.illustrations %}
                                             <img src="{{ asset('uploads/illustrations/' ~ image) }}"
                                                  class="img-thumbnail thumbnail"
@@ -67,6 +80,15 @@
                                                 <source src="{{ asset('uploads/videos/' ~ video) }}" type="video/mp4">
                                             </video>
                                         {% endfor %}
+                                        {% else %}
+                                        <img src="{{ asset('assets/images/indy.webp') }}"
+                                             class="img-thumbnail thumbnail"
+                                             alt="Image"
+                                             data-type="image"
+                                             data-src="{{ asset('assets/images/indy.webp') }}"
+                                             style="cursor: pointer; width: 100px; height: 100px;">
+                                        {% endif %}
+
                                     </div>
 
                                     <!-- Flèche droite -->
@@ -122,10 +144,11 @@
 
                                         <h2>Commentaires</h2>
 
+                                        {% if app.user %}
                                         {{ form_start(form) }}
                                         {{ form_row(form.content) }}
                                         <input type="hidden" name="figure_id" value="{{ figure.id }}">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('create-message') }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('create_message') }}">
 
                                         <div class="d-flex justify-content-end my-2 ">
                                             <button class="btn btn-warning  btn-sm me-md-2" type="submit"
@@ -133,7 +156,8 @@
                                             </button>
                                         </div>
 
-                                        {{ form_rest(form) }}
+                                        {{ form_end(form) }}
+                                        {% endif %}
                                         <div class="d-flex flex-column gap-2 ">
                                             {% for comment in comments %}
 

@@ -32,16 +32,16 @@ class UpdateFigureController extends AbstractController
             return new Response("figure non disponible", 404);
         }
 
-        /*        if(!$user) {
-                    throw new AccessDeniedHttpException('Vous devez être connecté pour pour modifier une figure');
-                }*/
+        if (!$user) {
+            throw new AccessDeniedHttpException('Vous devez être connecté pour pour modifier une figure');
+        }
 
         $form = $this->createForm(CreateFigureType::class, $figure);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $figure->updatedAt = new \DateTimeImmutable();
-            $figure->author = $user ?: $userRepository->find(1);
+            $figure->author = $user;
 
             $entityManager->persist($figure);
             $entityManager->flush();
