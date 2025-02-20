@@ -16,7 +16,15 @@ final class Version20241031150956 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE "user" (id SERIAL NOT NULL, username VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, profile_picture VARCHAR(255) DEFAULT NULL, is_authenticated BOOLEAN DEFAULT NULL, PRIMARY KEY(id))');
+        $connection = $this->connection;
+        $schemaManager = $connection->createSchemaManager();
+
+        // Liste des tables existantes
+        $existingTables = $schemaManager->listTableNames();
+
+        if (!in_array('"user"', $existingTables)) {
+            $this->addSql('CREATE TABLE "user" (id SERIAL NOT NULL, username VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, profile_picture VARCHAR(255) DEFAULT NULL, is_authenticated BOOLEAN DEFAULT NULL, PRIMARY KEY(id))');
+        }
     }
 
     public function down(Schema $schema): void

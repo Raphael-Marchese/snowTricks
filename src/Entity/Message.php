@@ -28,7 +28,7 @@ class Message
     public ?User $author = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     public ?Figure $figure = null;
 
     public function __construct()

@@ -35,23 +35,21 @@ class CreateMessageController extends AbstractController
     ): Response {
         $figure = $figureRepository->find($id);
 
-
         if (!$user instanceof User) {
-            // throw $this->createAccessDeniedException();
+             throw $this->createAccessDeniedException();
         }
         $message = new Message();
         $form = $this->createForm(CreateMessageType::class, $message);
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
             $message = $form->getData();
-            $message->author = $user ?: $userRepository->find(1);
+            $message->author = $user;
             $message->figure = $figure;
 
             $entityManager->persist($message);
             $entityManager->flush();
-            $this->addFlash('success', 'Votre figure a été créée');
+            $this->addFlash('success', 'Votre message a été créé');
 
             return $this->redirectToRoute('app_single_figure', [
                 'id' => $id,

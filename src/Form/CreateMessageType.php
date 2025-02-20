@@ -16,13 +16,13 @@ class CreateMessageType extends AbstractType
         ->add('content', TextareaType::class, [
             'mapped' => true,
             'label' => 'Votre commentaire',
-        'required' => true,
-        'attr' => [
-            'placeholder' => 'Écrivez ici votre commentaire...',
-            'class' => 'form-control',
-            'rows' => 3,
-        ],
-    ]);
+            'required' => true,
+            'attr' => [
+                'placeholder' => 'Écrivez ici votre commentaire...',
+                'class' => 'form-control',
+                'rows' => 3,
+            ],
+        ]);
 
     }
 
@@ -30,9 +30,6 @@ class CreateMessageType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Message::class,
-            'csrf_protection' => true,
-            'csrf_field_name' => '_token',
-            'csrf_token_id' => 'create_message',
             'block_name' => null,
         ]);
     }

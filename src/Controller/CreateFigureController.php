@@ -34,14 +34,14 @@ class CreateFigureController extends AbstractController
         $form = $this->createForm(CreateFigureType::class, $figure);
         $form->handleRequest($request);
 
-        /*        if(!$user) {
-                    throw new AccessDeniedHttpException('Vous devez être connecté pour pour créer une figure');
-                }*/
+        if (!$user) {
+            throw new AccessDeniedHttpException('Vous devez être connecté pour pour créer une figure');
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $figure = $form->getData();
-                $figure->author = $user ?: $userRepository->find(1);
+                $figure->author = $user;
                 $figure->createdAt = new \DateTimeImmutable();
 
                 $illustrations = $form->get('illustrations')->getData();
