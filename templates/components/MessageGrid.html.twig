@@ -1,0 +1,51 @@
+<div class="MessageGrid" {{ attributes }}>
+
+    {% if page > 1 %}
+        <div class="MessageGrid_page" id="page--{{ page - 1 }}" data-live-ignore="true"></div>
+    {% endif %}
+
+    {# Current page #}
+    <div class="MessageGrid_page" id="page--{{ page }}" data-live-ignore="true">
+        <div class="container">
+            <div class="row g-3 mt-3">
+                {% for item in this.items %}
+                    <div class="d-flex flex-column gap-2 ">
+                            <div class="d-flex  align-items-center ">
+                                <div class="flex-shrink-0"><img class="rounded-circle"
+                                                                style="width: 50px; height: 50px;"
+                                                                src="{{ asset('assets/websiteUtils/user.png') }}"
+                                                                alt="..."/></div>
+                                <div class="fw-bold ms-3">{{ item.author.username|raw }}</div>
+                            </div>
+                            <div class="ms-3">
+                                {{ item.content|raw }}
+                            </div>
+                        <p class="ms-3 fw-lighter fst-italic small">
+                            {{ item.createdAt|format_datetime('short', 'short', locale='fr') }}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="d-flex justify-content-center m-3">
+            {% if this.hasMore %}
+                <button data-action="live#action" data-live-action-param="more" class="MessageGrid_more">
+                    Load More
+                </button>
+            {% endif %}
+        </div>
+{#        {% if  this.getMessageNumber() >= 5 %}
+            <div class="d-flex justify-content-end me-3">
+                <button id="backToTop" style="border: none; background: none; padding: 0; cursor: pointer;"
+                        onclick="scrollToFiguresSection()">
+                    <i class="bi bi-arrow-up-circle-fill text-dark" style="font-size: 2rem;"></i>
+                </button>
+            </div>
+        {% endif %}#}
+    </div>
+
+
+</div>

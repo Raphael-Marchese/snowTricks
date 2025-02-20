@@ -35,3 +35,24 @@
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.6); /* Légère ombre pour un effet visuel */
     border-radius: 5px; /* Même arrondi que les vignettes */
 }
+
+@media (max-width: 576px) {
+    /* Mobile (petits écrans) */
+    body {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    /* Tablettes */
+    body {
+        font-size: 16px;
+    }
+}
+
+@media (min-width: 769px) {
+    /* Ordinateurs */
+    body {
+        font-size: 18px;
+    }
+}
