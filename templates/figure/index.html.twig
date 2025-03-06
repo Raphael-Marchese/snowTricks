@@ -19,15 +19,36 @@
                                                 <i class="bi bi-pencil"></i>
                                             </button>
                                         </a>
-                                        <a href="{{ '/delete/figure/' ~ figure.id }}" style="position: relative;">
-                                            <button class="btn btn-danger btn-icon" title="Supprimer">
+                                            <button class="btn btn-danger btn-icon" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ figure.id }}" title="Supprimer">
                                                 <i class="bi bi-trash"></i>
                                             </button>
-                                        </a>
                                     </div>
                                 {% endif %}
                             </header>
 
+                            <div class="modal fade" id="exampleModal-{{ figure.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete {{ figure.name }} ?</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete this figure?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                            </button>
+                                            <a href="{{ '/delete/figure/' ~ figure.id }}"
+                                               style="position: relative;">
+                                                <button type="button" class="btn btn-primary">Delete</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- Zone d'aperçu -->
                             <div class="container mt-4 ">
                                 <div id="preview" class="mb-3 text-center">
@@ -52,15 +73,51 @@
                                          style="gap: 10px; overflow-x: auto; scroll-behavior: smooth;">
                                         {% if  figure.illustrations or figure.videos %}
                                             {% for image in figure.illustrations %}
-                                                <img src="{{ asset('uploads/illustrations/' ~ image) }}"
+                                        <div class="d-flex flex-column align-items-center mb-3" style="gap: 5px;">
+
+                                        <img src="{{ asset('uploads/illustrations/' ~ image) }}"
                                                      class="img-thumbnail thumbnail"
                                                      alt="Image"
                                                      data-type="image"
                                                      data-src="{{ asset('uploads/illustrations/' ~ image) }}"
                                                      style="cursor: pointer; width: 100px; height: 100px;">
+                                                {% if app.user %}
+                                                    <div class="action-buttons d-flex justify-content-center gap-2">
+                                                        <a href="{{ '/update/image/' }}" class="btn btn-secondary btn-icon btn-sm" title="Modifier">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                        <button class="btn btn-danger btn-icon btn-sm" data-bs-toggle="modal" data-bs-target="#deleteImageModal-" title="Supprimer">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                    <!-- Modal de suppression -->
+                                                    <div class="modal fade" id="deleteImageModal-" tabindex="-1" aria-labelledby="deleteImageLabel-" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h1 class="modal-title fs-5" id="deleteImageLabel-">Supprimer cette image ?</h1>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    Êtes-vous sûr de vouloir supprimer cette image ?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <form action="{{ path('app_delete_image', { id: figure.id }) }}" method="POST" class="d-inline-block">
+                                                                        <input type="hidden" name="image_path" value="{{ image }}">
+                                                                        <button class="btn btn-danger btn-sm" title="Supprimer">
+                                                                            <i class="bi bi-trash"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                        </div>
                                             {% endfor %}
                                             {% for video in figure.videos %}
-                                                <video class="img-thumbnail thumbnail"
+                                        <div class="d-flex flex-column align-items-center mb-3" style="gap: 5px;">
+                                        <video class="img-thumbnail thumbnail"
                                                        style="width: 100px; height: 100px; cursor: pointer;"
                                                        data-type="video"
                                                        data-src="{{ asset('uploads/videos/' ~ video) }}"
@@ -69,6 +126,35 @@
                                                     <source src="{{ asset('uploads/videos/' ~ video) }}"
                                                             type="video/mp4">
                                                 </video>
+                                                {% if app.user %}
+                                                    <div class="action-buttons d-flex justify-content-center gap-2">
+                                                        <a href="{{ '/update/image/' }}" class="btn btn-secondary btn-icon btn-sm" title="Modifier">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                        <button class="btn btn-danger btn-icon btn-sm" data-bs-toggle="modal" data-bs-target="#deleteImageModal-" title="Supprimer">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                    <!-- Modal de suppression -->
+                                                    <div class="modal fade" id="deleteImageModal-" tabindex="-1" aria-labelledby="deleteImageLabel-" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h1 class="modal-title fs-5" id="deleteImageLabel-">Supprimer cette image ?</h1>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    Êtes-vous sûr de vouloir supprimer cette image ?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary btn-icon btn-sm" data-bs-dismiss="modal">Annuler</button>
+                                                                    <a href="{{ '/delete/image/' }}" class="btn btn-danger">Supprimer</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                        </div>
                                             {% endfor %}
                                         {% else %}
                                             <img src="{{ asset('assets/images/indy.webp') }}"
@@ -96,7 +182,7 @@
                             <section>
                                 <div class="d-flex gap-2">
                                     <h5>Groupe : <span
-                                                class="badge bg-secondary">{{ figure.figureGroup|raw|capitalize }}</span>
+                                                class="badge bg-secondary">{{ figure.categoryName|raw|capitalize }}</span>
                                     </h5>
                                 </div>
                                 <div class="text-muted fst-italic mb-2">
@@ -111,27 +197,6 @@
                             <section>
                                 <div class="card bg-light">
                                     <div class="card-body">
-                                        <!-- Comment form-->
-                                        {#                                    {% if session and not commentEdit %}
-
-                                    {% endif %}
-
-                                    {% if commentEdit %}
-                                        <h2>Modification du commentaire</h2>
-                                        <form class="mb-4 d-flex gap-2" id="editCommentForm" method="post"
-                                              action="/comment/{{ editedComment.id }}/edit/submit">
-                                            <label for="edit-comment-content"></label>
-                                            <textarea name="content" id="edit-comment-content" class="form-control"
-                                                      rows="3"
-                                                      placeholder="Écrivez ici votre commentaire">{{ editedComment.content|raw }}</textarea>
-
-                                            <button class=" btn btn-warning btn-sm me-md-2">Modifier</button>
-                                            <input type="hidden" name="post_id" value="{{ post.id }}">
-                                            <input type="hidden" name="comment_id" value="{{ editedComment.id }}">
-
-                                        </form>
-                                    {% endif %} #}
-
                                         <h2>Commentaires</h2>
 
                                         {% if app.user %}
@@ -151,31 +216,6 @@
                                         {% endif %}
                                         <div class="d-flex flex-column gap-2 ">
                                             {% for comment in comments %}
-
-                                                {#                                            {% if session.user_id == comment.author.id %}
-                                                <div class="d-flex  align-items-center ">
-                                                    <div class="flex-shrink-0"><img class="rounded-circle"
-                                                                                    style="width: 50px; height: 50px;"
-                                                                                    src="../../../public/assets/websiteUtils/user.png"
-                                                                                    alt="..."/></div>
-                                                    <div class="fw-bold ms-3 text-muted">{{ comment.author.username|raw }}</div>
-                                                </div>
-                                                <div class="ms-3 text-muted">
-                                                    {{ comment.content|raw }}
-                                                </div>
-
-                                                <div class="ms-3 text-info">
-                                                    Votre commentaire doit être validé pour apparaitre en ligne
-                                                </div>
-                                                <div class="d-flex justify-content-end m-3">
-                                                    <a href="/comment/{{ comment.id }}/edit">
-                                                        <button class="btn btn-secondary me-3">Modifier</button>
-                                                    </a>
-                                                    <a href="/comment/{{ comment.id }}/delete">
-                                                        <button class="btn btn-danger">Supprimer</button>
-                                                    </a>
-                                                </div>
-                                            {% endif %} #}
                                                 <div class="d-flex  align-items-center ">
                                                     <div class="flex-shrink-0"><img class="rounded-circle"
                                                                                     style="width: 50px; height: 50px;"
@@ -189,16 +229,6 @@
                                                 <p class=" me-2 fw-lighter fst-italic small">
                                                     {{ comment.createdAt|format_datetime('short', 'short', locale='fr') }}
                                                 </p>
-                                                {#                                                {% if session.user_id == comment.author.id or session.role == 'ROLE_ADMIN' %}
-                                                    <div class="d-flex justify-content-end m-3">
-                                                        <a href="/comment/{{ comment.id }}/edit">
-                                                            <button class="btn btn-secondary me-3">Modifier</button>
-                                                        </a>
-                                                        <a href="/comment/{{ comment.id }}/delete">
-                                                            <button class="btn btn-danger">Supprimer</button>
-                                                        </a>
-                                                    </div>
-                                                {% endif %} #}
                                             {% endfor %}
                                         </div>
                                     </div>
@@ -208,23 +238,28 @@
 
                         <!-- Mobile view -->
                         <article class="d-block d-md-none">
-                            {% if figure.illustrations %}
                             <header class="bg-white position-relative d-flex align-items-center justify-content-center mb-2"
-                                    style="background-image: url('{{ asset('uploads/illustrations/' ~ figure.illustrations[0]) }}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 30vh;">
-                                {% elseif figure.videos %}
-                                <header class="bg-white position-relative d-flex align-items-center justify-content-center mb-2"
-                                        style="background-image: url('{{ asset('uploads/illustrations/' ~ figure.videos[0]) }}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 30vh;">
+                                    style="
+                                            background-image:
+                                    {% if figure.illustrations|length > 0 %}
+                                            url('{{ asset('uploads/illustrations/' ~ figure.illustrations[0]) }}');
+                                    {% elseif figure.videos|length > 0 %}
+                                            url('{{ asset('uploads/videos/' ~ figure.videos[0]) }}');
                                     {% else %}
-                                    <header class="bg-white position-relative d-flex align-items-center justify-content-center mb-2"
-                                            style="background-image: url('{{ asset('assets/websiteUtils/homepage_picture.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 30vh;">
-                                        {% endif %}
-                                        <div class="container text-center position-relative" style="z-index: 1;">
-                                            <div class="overlay-text position-relative d-inline-block px-4 py-3">
-                                                <h1 class="display-5 fw-bold text-dark mb-2">{{ figure.name }}</h1>
-                                            </div>
-                                        </div>
-                                    </header>
-                                    <p class="d-flex justify-content-center flex-column">
+                                            url('{{ asset('assets/websiteUtils/homepage_picture.jpg') }}');
+                                    {% endif %}
+                                            background-size: cover;
+                                            background-position: center;
+                                            background-repeat: no-repeat;
+                                            height: 30vh;">
+                                <div class="container text-center position-relative" style="z-index: 1;">
+                                    <div class="overlay-text position-relative d-inline-block px-4 py-3">
+                                        <h1 class="display-5 fw-bold text-dark mb-2">{{ figure.name }}</h1>
+                                    </div>
+                                </div>
+                            </header>
+
+                            <p class="d-flex justify-content-center flex-column">
                                         <button class="btn btn-primary mx-3" type="button" data-bs-toggle="collapse"
                                                 data-bs-target="#collapseExample" aria-expanded="false"
                                                 aria-controls="collapseExample">
@@ -255,7 +290,7 @@
                                     <section class="d-flex flex-column mx-2">
                                         <h1 class="align-self-center">Description</h1>
                                         <p class="fs-6 ">{{ figure.description|raw }}</p>
-                                        <span class="badge text-bg-secondary w-25 "> {{ figure.figureGroup|raw }}</span>
+                                        <span class="badge text-bg-secondary w-25 "> {{ figure.categoryName|raw|capitalize }}</span>
                                         <p class="fs-6 fw-lighter fst-italic mt-2"> créé le
                                             : {{ figure.createdAt|format_datetime('full', 'short', locale='fr') }}</p>
                                         {% if figure.updatedAt %}
@@ -266,26 +301,6 @@
                                     <section>
                                         <div class="card bg-light">
                                             <div class="card-body">
-                                                <!-- Comment form-->
-                                                {#                                    {% if session and not commentEdit %}
-
-                                    {% endif %}
-
-                                    {% if commentEdit %}
-                                        <h2>Modification du commentaire</h2>
-                                        <form class="mb-4 d-flex gap-2" id="editCommentForm" method="post"
-                                              action="/comment/{{ editedComment.id }}/edit/submit">
-                                            <label for="edit-comment-content"></label>
-                                            <textarea name="content" id="edit-comment-content" class="form-control"
-                                                      rows="3"
-                                                      placeholder="Écrivez ici votre commentaire">{{ editedComment.content|raw }}</textarea>
-
-                                            <button class=" btn btn-warning btn-sm me-md-2">Modifier</button>
-                                            <input type="hidden" name="post_id" value="{{ post.id }}">
-                                            <input type="hidden" name="comment_id" value="{{ editedComment.id }}">
-
-                                        </form>
-                                    {% endif %} #}
 
                                                 <h2 class="text-center">Commentaires</h2>
                                                 <p class="d-flex justify-content-center flex-column">
