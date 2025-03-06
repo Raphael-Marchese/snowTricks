@@ -22,7 +22,7 @@ class CreateFigureType extends AbstractType
             ->add('description')
             ->add('figureGroup')
             ->add('illustrations', CollectionType::class, [
-                'entry_type' => FileType::class,
+                'entry_type' => ImageType::class,
                 'entry_options' => [
                     'label' => 'Illustration',
                     'required' => false,
