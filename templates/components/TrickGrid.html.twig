@@ -18,7 +18,7 @@
                                href="{{ '/figure/' ~ item.id }}">
                             {% if item.illustrations %}
                                 <img class="card-img-top"
-                                     src="{{ asset('uploads/illustrations/') ~ item.illustrations|first }}"
+                                     src="{{ asset('uploads/illustrations/') ~ item.illustrations|first.path }}"
                                      alt="Photo illustration article"
                                      style="width: 100%; height: 180px; object-fit: cover;"/>
                             {% else %}

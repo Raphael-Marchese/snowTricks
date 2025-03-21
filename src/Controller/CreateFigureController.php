@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Figure;
+use App\Entity\Image;
 use App\Entity\User;
+use App\Entity\Video;
 use App\Form\CreateFigureType;
+use App\Repository\CategoryRepository;
 use App\Repository\FigureRepository;
 use App\Repository\UserRepository;
 use App\Service\FilesUploader;
@@ -28,7 +31,8 @@ class CreateFigureController extends AbstractController
         #[Autowire('%kernel.project_dir%/public/uploads/illustrations')] string $illustrationsDirectory,
         #[Autowire('%kernel.project_dir%/public/uploads/videos')] string $videosDirectory,
         FilesUploader $filesUploader,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        CategoryRepository $categoryRepository,
     ) {
         $figure = new Figure();
         $form = $this->createForm(CreateFigureType::class, $figure);
@@ -44,12 +48,24 @@ class CreateFigureController extends AbstractController
                 $figure->author = $user;
                 $figure->createdAt = new \DateTimeImmutable();
 
+                $categoryName = $form->get('figureGroup')->getData();
+
+                $category = $categoryRepository->findOneBy(['name' => $categoryName]);
+
+                if ($category) {
+                    $figure->figureGroup = $category;
+                }
+
                 $illustrations = $form->get('illustrations')->getData();
 
                 if ($illustrations) {
                     foreach ($illustrations as $illustration) {
-                        $filename = $filesUploader->upload($illustration, $illustrationsDirectory);
-                        $figure->illustrations[] = $filename;
+                        $path = $filesUploader->upload($illustration, $illustrationsDirectory);
+                        $image = new Image();
+                        $image->setFigure($figure);
+                        $image->path = $path;
+
+                        $figure->addIllustration($image);
                     }
                 }
 
@@ -58,7 +74,10 @@ class CreateFigureController extends AbstractController
                 if ($videos) {
                     foreach ($videos as $video) {
                         $filename = $filesUploader->upload($video, $videosDirectory);
-                        $figure->videos[] = $filename;
+                        $video = new Video();
+                        $video->setFigure($figure);
+                        $video->path = $filename;
+                        $figure->addVideo($video);
                     }
                 }
 

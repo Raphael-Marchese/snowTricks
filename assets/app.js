@@ -2,67 +2,62 @@ import './bootstrap.js';
 import './styles/app.css';
 
 document.addEventListener('DOMContentLoaded', () => {
-    const thumbnails = document.querySelectorAll('.thumbnail'); // Toutes les vignettes
-    const previewImage = document.getElementById('previewImage'); // Zone pour les images
-    const previewVideo = document.getElementById('previewVideo'); // Zone pour les vidéos
-    const videoSource = document.getElementById('videoSource'); // Source vidéo dans le preview
-    const thumbnailContainer = document.getElementById('thumbnailContainer'); // Conteneur des vignettes
-    const arrowLeft = document.getElementById('arrowLeft'); // Flèche gauche
-    const arrowRight = document.getElementById('arrowRight'); // Flèche droite
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const previewImage = document.getElementById('previewImage');
+    const previewVideo = document.getElementById('previewVideo');
+    const videoSource = document.getElementById('videoSource');
+    const thumbnailContainer = document.getElementById('thumbnailContainer');
+    const arrowLeft = document.getElementById('arrowLeft');
+    const arrowRight = document.getElementById('arrowRight');
 
-    // Fonction pour afficher une image dans la preview
     const showImage = (src, thumbnail) => {
-        previewImage.src = src; // Charger l'image
-        previewImage.classList.remove('d-none'); // Afficher l'image
-        previewVideo.classList.add('d-none'); // Cacher la vidéo
-        videoSource.src = ''; // Réinitialiser la source vidéo
-        highlightThumbnail(thumbnail); // Ajouter un cadre autour de la vignette sélectionnée
+        previewImage.src = src;
+        previewImage.classList.remove('d-none');
+        previewVideo.classList.add('d-none');
+        videoSource.src = '';
+        highlightThumbnail(thumbnail);
 
     };
 
-    // Fonction pour afficher une vidéo dans la preview
     const showVideo = (src, thumbnail) => {
-        videoSource.src = src; // Mettre à jour la source vidéo
-        previewVideo.load(); // Recharger la vidéo pour qu'elle fonctionne
-        previewVideo.classList.remove('d-none'); // Afficher la vidéo
-        previewImage.classList.add('d-none'); // Cacher l'image
-        highlightThumbnail(thumbnail); // Ajouter un cadre autour de la vignette sélectionnée
+        videoSource.src = src;
+        previewVideo.load();
+        previewVideo.classList.remove('d-none');
+        previewImage.classList.add('d-none');
+        highlightThumbnail(thumbnail);
     };
 
     const highlightThumbnail = (selectedThumbnail) => {
         thumbnails.forEach((thumbnail) => {
-            thumbnail.classList.remove('selected-thumbnail'); // Supprimer la classe des autres
+            thumbnail.classList.remove('selected-thumbnail');
         });
-        selectedThumbnail.classList.add('selected-thumbnail'); // Ajouter la classe à la vignette sélectionnée
+        selectedThumbnail.classList.add('selected-thumbnail');
     };
-    // Gestion des clics sur les vignettes
     thumbnails.forEach((thumbnail) => {
         thumbnail.addEventListener('click', () => {
-            const type = thumbnail.dataset.type; // Type : 'image' ou 'video'
-            const src = thumbnail.dataset.src; // Source de l'image ou vidéo
+            const type = thumbnail.dataset.type;
+            const src = thumbnail.dataset.src;
 
             if (type === 'image') {
-                showImage(src, thumbnail); // Afficher une image
+                showImage(src, thumbnail);
             } else if (type === 'video') {
-                showVideo(src, thumbnail); // Afficher une vidéo
+                showVideo(src, thumbnail);
             }
         });
     });
 
-    // Initialisation : charger la première vignette
     if (thumbnails.length > 0) {
         const firstThumbnail = thumbnails[0];
         const type = firstThumbnail.dataset.type;
         const src = firstThumbnail.dataset.src;
 
         if (type === 'image') {
-            showImage(src, firstThumbnail); // Afficher la première image
+            showImage(src, firstThumbnail);
         } else if (type === 'video') {
-            showVideo(src, firstThumbnail); // Afficher la première vidéo
+            showVideo(src, firstThumbnail);
         }
     }
 
-    // Gestion du défilement des vignettes avec les flèches
     arrowLeft.addEventListener('click', () => {
         thumbnailContainer.scrollBy({ left: -200, behavior: 'smooth' });
     });

@@ -28,7 +28,7 @@ class Figure
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $description = null;
 
-    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'figures')]
+    #[ORM\ManyToOne(targetEntity: Category::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     public ?Category $figureGroup = null;
 
@@ -39,13 +39,13 @@ class Figure
     /**
      * @var Collection<int, Image>
      */
-    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'figure')]
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'figure', cascade: ["persist", "remove"],  orphanRemoval: true)]
     public Collection $illustrations;
 
     /**
      * @var Collection<int, Video>
      */
-    #[ORM\OneToMany(targetEntity: Video::class, mappedBy: 'figure')]
+    #[ORM\OneToMany(targetEntity: Video::class, mappedBy: 'figure', cascade: ["persist", "remove"],  orphanRemoval: true)]
     public Collection $videos;
 
     public function __construct()

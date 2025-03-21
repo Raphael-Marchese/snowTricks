@@ -16,7 +16,7 @@ class Video
     #[ORM\Column(length: 255)]
     public ?string $path = null;
 
-    #[ORM\ManyToOne(inversedBy: 'videos')]
+    #[ORM\ManyToOne(cascade: ["persist"], inversedBy: 'videos')]
     private ?Figure $figure = null;
 
     public function getFigure(): ?Figure

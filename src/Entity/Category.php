@@ -18,4 +18,14 @@ class Category
     #[ORM\Column(type: Types::STRING, unique: true, enumType: CategoryNameEnum::class)]
     public CategoryNameEnum $name;
 
+    public function getName(): string
+    {
+        return $this->name->value;
+    }
+
+    public function setName(CategoryNameEnum $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
 }

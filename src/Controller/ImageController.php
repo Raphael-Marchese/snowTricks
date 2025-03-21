@@ -68,14 +68,22 @@ final class ImageController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_image_delete', methods: ['POST'])]
+    #[Route('delete/{id}', name: 'app_image_delete', methods: ['POST'])]
     public function delete(Request $request, Image $image, EntityManagerInterface $entityManager): Response
     {
+        $figure = $image->getFigure();
+
+        if(!$figure)
+        {
+            return $this->redirectToRoute('app_homepage', ['id' => $figure->id]);
+
+        }
+
         if ($this->isCsrfTokenValid('delete'.$image->id, $request->getPayload()->getString('_token'))) {
             $entityManager->remove($image);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_image_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_update_figure', ['id' => $figure->id]);
     }
 }

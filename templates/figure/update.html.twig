@@ -28,14 +28,27 @@
                                 </div>
                                 <!-- Figure Group input-->
                                 <div class="form-floating mb-3">
-                                    <input class="form-control"
-                                           name="{{ field_name(form.figureGroup) }}"
-                                           value="{{ field_value(form.figureGroup) }}"
-                                           placeholder="Nom de la figure"
-                                    />
-                                    <label for={{ field_name(form.figureGroup) }}>Groupe figure</label>
+                                    {{ form_widget(form.figureGroup, { 'attr': {'class': 'form-control', 'placeholder': 'Choisir un groupe'} }) }}
+                                    <label for="{{ field_name(form.figureGroup) }}">Group</label>
                                 </div>
 
+                                <h3>Images existantes </h3>
+                                <ul id="existing-illustrations-list" class="list-unstyled">
+                                    {% for illustration in figure.illustrations %}
+                                        <li>
+                                            <img src="{{ asset('uploads/illustrations/' ~ illustration.path) }}" alt="Image"
+                                                 style="max-width: 150px;">
+                                            <a class="text-decoration-none link-dark"
+                                               href="{{ '/image/' ~ illustration.id }}" methods="POST">
+                                                <button type="button" class="btn btn-danger btn-sm ms-2 mt-2">
+                                                    Supprimer
+                                                </button>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                                <h3>Ajout d'image</h3>
                                 <ul id="illustrations-list" class="list-unstyled"
                                     data-prototype="{{ form_widget(form.illustrations.vars.prototype)|e }}">
                                     {% do form.illustrations.setRendered() %}
@@ -53,6 +66,26 @@
                                     image
                                 </button>
 
+                                <p>Vidéos existantes :</p>
+                                <ul id="existing-videos-list" class="list-unstyled">
+                                    {% for video in figure.videos %}
+                                        <li>
+                                            <video width="200" height="150" controls>
+                                                <source src="{{ asset('uploads/videos/' ~ video.path) }}"
+                                                        type="video/mp4">
+                                                Votre navigateur ne supporte pas les vidéos.
+                                            </video>
+                                            <a class="text-decoration-none link-dark"
+                                               href="{{ '/video/' ~ video.id }}" methods="POST">
+                                                <button type="button" class="btn btn-danger btn-sm ms-2 mt-2">
+                                                    Supprimer
+                                                </button>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                                <p>Ajout de vidéo</p>
                                 <ul id="videos-list" class="list-unstyled"
                                     data-prototype="{{ form_widget(form.videos.vars.prototype)|e }}">
                                     {% do form.videos.setRendered() %}
@@ -145,6 +178,23 @@
                 index++;
             });
         });
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-delete-url]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const deleteUrl = button.getAttribute('data-delete-url');
+
+                    fetch(deleteUrl, {method: 'POST'})
+                        .then(response => {
+                            if (response.ok) {
+                                button.parentElement.remove();
+                            } else {
+                                alert('Erreur lors de la suppression');
+                            }
+                        });
+                });
+            });
+        });
+
     </script>
 
 {% endblock %}

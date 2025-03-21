@@ -16,7 +16,7 @@ class Image
     #[ORM\Column(length: 255)]
     public ?string $path = null;
 
-    #[ORM\ManyToOne(inversedBy: 'illustrations')]
+    #[ORM\ManyToOne(cascade: ["persist"], inversedBy: 'illustrations')]
     private ?Figure $figure = null;
 
     public function getFigure(): ?Figure

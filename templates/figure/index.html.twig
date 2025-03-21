@@ -75,11 +75,11 @@
                                             {% for image in figure.illustrations %}
                                         <div class="d-flex flex-column align-items-center mb-3" style="gap: 5px;">
 
-                                        <img src="{{ asset('uploads/illustrations/' ~ image) }}"
+                                        <img src="{{ asset('uploads/illustrations/' ~ image.path) }}"
                                                      class="img-thumbnail thumbnail"
                                                      alt="Image"
                                                      data-type="image"
-                                                     data-src="{{ asset('uploads/illustrations/' ~ image) }}"
+                                                     data-src="{{ asset('uploads/illustrations/' ~ image.path) }}"
                                                      style="cursor: pointer; width: 100px; height: 100px;">
                                                 {% if app.user %}
                                                     <div class="action-buttons d-flex justify-content-center gap-2">
@@ -103,7 +103,7 @@
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <form action="{{ path('app_delete_image', { id: figure.id }) }}" method="POST" class="d-inline-block">
-                                                                        <input type="hidden" name="image_path" value="{{ image }}">
+                                                                        <input type="hidden" name="image_path" value="{{ image.path }}">
                                                                         <button class="btn btn-danger btn-sm" title="Supprimer">
                                                                             <i class="bi bi-trash"></i>
                                                                         </button>
@@ -120,10 +120,10 @@
                                         <video class="img-thumbnail thumbnail"
                                                        style="width: 100px; height: 100px; cursor: pointer;"
                                                        data-type="video"
-                                                       data-src="{{ asset('uploads/videos/' ~ video) }}"
+                                                       data-src="{{ asset('uploads/videos/' ~ video.path) }}"
                                                        controls
                                                        muted>
-                                                    <source src="{{ asset('uploads/videos/' ~ video) }}"
+                                                    <source src="{{ asset('uploads/videos/' ~ video.path) }}"
                                                             type="video/mp4">
                                                 </video>
                                                 {% if app.user %}
@@ -242,9 +242,9 @@
                                     style="
                                             background-image:
                                     {% if figure.illustrations|length > 0 %}
-                                            url('{{ asset('uploads/illustrations/' ~ figure.illustrations[0]) }}');
+                                            url('{{ asset('uploads/illustrations/' ~ figure.illustrations[0].path) }}');
                                     {% elseif figure.videos|length > 0 %}
-                                            url('{{ asset('uploads/videos/' ~ figure.videos[0]) }}');
+                                            url('{{ asset('uploads/videos/' ~ figure.videos[0].path) }}');
                                     {% else %}
                                             url('{{ asset('assets/websiteUtils/homepage_picture.jpg') }}');
                                     {% endif %}
@@ -269,21 +269,21 @@
 
                                     <div class="collapse" id="collapseExample">
                                         {% for image in figure.illustrations %}
-                                            <img src="{{ asset('uploads/illustrations/' ~ image) }}"
+                                            <img src="{{ asset('uploads/illustrations/' ~ image.path) }}"
                                                  class="img-thumbnail thumbnail mb-2"
                                                  alt="Image"
                                                  data-type="image"
-                                                 data-src="{{ asset('uploads/illustrations/' ~ image) }}"
+                                                 data-src="{{ asset('uploads/illustrations/' ~ image.path) }}"
                                                  style="cursor: pointer; width: 100%">
                                         {% endfor %}
                                         {% for video in figure.videos %}
                                             <video class="img-thumbnail thumbnail mb-2"
                                                    style="width: 100%; cursor: pointer;"
                                                    data-type="video"
-                                                   data-src="{{ asset('uploads/videos/' ~ video) }}"
+                                                   data-src="{{ asset('uploads/videos/' ~ video.path) }}"
                                                    controls
                                                    muted>
-                                                <source src="{{ asset('uploads/videos/' ~ video) }}" type="video/mp4">
+                                                <source src="{{ asset('uploads/videos/' ~ video.path) }}" type="video/mp4">
                                             </video>
                                         {% endfor %}
                                     </div>

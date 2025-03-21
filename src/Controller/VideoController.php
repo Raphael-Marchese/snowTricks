@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Figure;
 use App\Entity\Video;
 use App\Form\VideoType;
+use App\Repository\FigureRepository;
 use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -68,14 +70,23 @@ final class VideoController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_video_delete', methods: ['POST'])]
+    #[Route('delete/{id}', name: 'app_video_delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, Video $video, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$video->getId(), $request->getPayload()->getString('_token'))) {
+        $figure = $video->getFigure();
+
+        if(!$figure)
+        {
+            return $this->redirectToRoute('app_homepage', ['id' => $figure->id]);
+
+        }
+
+        if ($this->isCsrfTokenValid('delete'.$video->id, $request->getPayload()->getString('_token'))) {
+            $figure?->getVideos()->removeElement($video);
             $entityManager->remove($video);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_video_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_update_figure', ['id' => $figure->id]);
     }
 }

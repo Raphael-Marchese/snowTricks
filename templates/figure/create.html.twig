@@ -28,12 +28,8 @@
                                 </div>
                                 <!-- Figure Group input-->
                                 <div class="form-floating mb-3">
-                                    <input class="form-control"
-                                           name="{{ field_name(form.figureGroup) }}"
-                                           value="{{ field_value(form.figureGroup) }}"
-                                           placeholder="Nom de la figure"
-                                    />
-                                    <label for={{ field_name(form.figureGroup) }}>Groupe figure</label>
+                                    {{ form_widget(form.figureGroup, { 'attr': {'class': 'form-control', 'placeholder': 'Choisir un groupe'} }) }}
+                                    <label for="{{ field_name(form.figureGroup) }}">Group</label>
                                 </div>
 
                                 <ul id="illustrations-list" class="list-unstyled" data-prototype="{{ form_widget(form.illustrations.vars.prototype)|e }}" >
