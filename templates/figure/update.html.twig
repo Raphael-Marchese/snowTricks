@@ -38,7 +38,7 @@
                                         <li>
                                             <img src="{{ asset('uploads/illustrations/' ~ illustration.path) }}" alt="Image"
                                                  style="max-width: 150px;">
-                                            <a class="text-decoration-none link-dark"
+                                            <a class="text-decoration-none link-dark" data-turbo="false"
                                                href="{{ '/image/' ~ illustration.id }}" methods="POST">
                                                 <button type="button" class="btn btn-danger btn-sm ms-2 mt-2">
                                                     Supprimer
@@ -75,7 +75,7 @@
                                                         type="video/mp4">
                                                 Votre navigateur ne supporte pas les vidéos.
                                             </video>
-                                            <a class="text-decoration-none link-dark"
+                                            <a class="text-decoration-none link-dark" data-turbo="false"
                                                href="{{ '/video/' ~ video.id }}" methods="POST">
                                                 <button type="button" class="btn btn-danger btn-sm ms-2 mt-2">
                                                     Supprimer
@@ -132,7 +132,7 @@
 
 {% block javascripts %}
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('turbo:load', () => {
             const addButton = document.getElementById('add-illustration-btn');
             const list = document.getElementById('illustrations-list');
             const prototype = list.dataset.prototype; // Symfony génère automatiquement un prototype si configuré
@@ -155,7 +155,7 @@
                 index++;
             });
         });
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('turbo:load', () => {
             const addButton = document.getElementById('add-video-btn');
             const list = document.getElementById('videos-list');
             const prototype = list.dataset.prototype;
@@ -178,7 +178,7 @@
                 index++;
             });
         });
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('turbo:load', () => {
             document.querySelectorAll('[data-delete-url]').forEach(button => {
                 button.addEventListener('click', () => {
                     const deleteUrl = button.getAttribute('data-delete-url');

@@ -4,7 +4,7 @@
         {# 🦊 #}
         {# Adding a fake "previous page" div is enough to trick the system #}
         {# It must have the same ID than the original page #}
-        <div class="TrickGrid_page" id="page--{{ page - 1 }}" data-live-ignore="true"></div>
+        <div class="TrickGrid_page" id="page--{{ page - 1 }}" ></div>
     {% endif %}
 
     {# Current page #}
@@ -14,7 +14,7 @@
                 {% for item in this.items %}
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-5th">
                         <div class="card shadow border-0 h-100">
-                            <a class="text-decoration-none link-dark"
+                            <a class="text-decoration-none link-dark" data-turbo="false"
                                href="{{ '/figure/' ~ item.id }}">
                             {% if item.illustrations %}
                                 <img class="card-img-top"
@@ -29,14 +29,14 @@
                             {% endif %}
                             </a>
                             <div class="card-body ">
-                                <a class="text-decoration-none link-dark"
+                                <a class="text-decoration-none link-dark" data-turbo="false"
                                    href="{{ '/figure/' ~ item.id }}">
                                     <h5 class="card-title mb-3">{{ item.name }}</h5>
                                 </a>
                                 {% if app.user %}
                                     <div class="action-buttons d-flex justify-content-end gap-2"
                                     >
-                                        <a href="{{ '/update/figure/' ~ item.id }}"
+                                        <a href="{{ '/update/figure/' ~ item.id }}" data-turbo="false"
                                            style="position: relative; z-index: 1;">
                                             <button class="btn btn-secondary btn-icon" title="Modifier">
                                                 <i class="bi bi-pencil"></i>
@@ -65,7 +65,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
                                     </button>
-                                    <a href="{{ '/delete/figure/' ~ item.id }}"
+                                    <a href="{{ '/delete/figure/' ~ item.id }}" data-turbo="false"
                                        style="position: relative;">
                                         <button type="button" class="btn btn-primary">Delete</button>
                                     </a>
