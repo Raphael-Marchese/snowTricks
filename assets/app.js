@@ -1,7 +1,7 @@
 import './bootstrap.js';
 import './styles/app.css';
 
-document.addEventListener('turbo:load', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const thumbnails = document.querySelectorAll('.thumbnail');
     const previewImage = document.getElementById('previewImage');
     const previewVideo = document.getElementById('previewVideo');

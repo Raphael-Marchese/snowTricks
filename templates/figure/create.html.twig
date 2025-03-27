@@ -89,7 +89,7 @@
 
 {% block javascripts %}
 <script>
-document.addEventListener('turbo:load', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const addButton = document.getElementById('add-illustration-btn');
     const list = document.getElementById('illustrations-list');
     const prototype = list.dataset.prototype; // Symfony génère automatiquement un prototype si configuré
@@ -112,7 +112,7 @@ document.addEventListener('turbo:load', () => {
         index++;
     });
 });
-document.addEventListener('turbo:load', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const addButton = document.getElementById('add-video-btn');
     const list = document.getElementById('videos-list');
     const prototype = list.dataset.prototype;

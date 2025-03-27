@@ -75,7 +75,7 @@
                                     <!-- Galerie de vignettes -->
                                     <div class="flex-grow-1 overflow-hidden d-flex mx-2" id="thumbnailContainer"
                                          style="gap: 10px; overflow-x: auto; scroll-behavior: smooth;">
-                                        {% if  figure.illustrations or figure.videos %}
+                                        {% if  figure.illustrations is not empty or figure.videos is not empty %}
                                             {% for image in figure.illustrations %}
                                                 <div class="d-flex flex-column align-items-center mb-3"
                                                      style="gap: 5px;">
@@ -88,21 +88,21 @@
                                                          style="cursor: pointer; width: 100px; height: 100px;">
                                                     {% if app.user %}
                                                         <div class="action-buttons d-flex justify-content-center gap-2">
-                                                            <a href="{{ '/image/' ~ figure.illustrations[0].id ~ '/edit' }}" data-turbo="false"
+                                                            <a href="{{ '/image/' ~ image.id ~ '/edit' }}" data-turbo="false"
                                                                class="btn btn-secondary btn-icon btn-sm"
                                                                title="Modifier">
                                                                 <i class="bi bi-pencil"></i>
                                                             </a>
                                                             <button class="btn btn-danger btn-icon btn-sm"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteImageModal-"
+                                                                    data-bs-target="#deleteImageModal-{{ image.id }}"
                                                                     title="Supprimer">
                                                                 <i class="bi bi-trash"></i>
                                                             </button>
                                                         </div>
                                                         <!-- Modal de suppression -->
-                                                        <div class="modal fade" id="deleteImageModal-" tabindex="-1"
-                                                             aria-labelledby="deleteImageLabel-" aria-hidden="true">
+                                                        <div class="modal fade" id="deleteImageModal-{{ image.id }}" tabindex="-1"
+                                                             aria-labelledby="deleteImageLabel-{{ image.id }}" aria-hidden="true">
                                                             <div class="modal-dialog modal-dialog-centered">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
@@ -122,7 +122,7 @@
                                                                                 data-bs-dismiss="modal">Annuler
                                                                         </button>
                                                                         <a class="text-decoration-none link-dark" data-turbo="false"
-                                                                           href="{{ '/image/' ~ figure.illustrations[0].id }}"
+                                                                           href="{{ '/image/' ~ image.id }}"
                                                                            methods="POST"> <input type="hidden"
                                                                                                   name="image_path"
                                                                                                   value="{{ image.path }}">
@@ -159,14 +159,14 @@
                                                             </a>
                                                             <button class="btn btn-danger btn-icon btn-sm"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteImageModal-"
+                                                                    data-bs-target="#deleteVideoModal-{{ video.id }}"
                                                                     title="Supprimer">
                                                                 <i class="bi bi-trash"></i>
                                                             </button>
                                                         </div>
                                                         <!-- Modal de suppression -->
-                                                        <div class="modal fade" id="deleteImageModal-" tabindex="-1"
-                                                             aria-labelledby="deleteImageLabel-" aria-hidden="true">
+                                                        <div class="modal fade" id="deleteVideoModal-{{ video.id }}" tabindex="-1"
+                                                             aria-labelledby="deleteVideoLabel-{{ video.id }}" aria-hidden="true">
                                                             <div class="modal-dialog modal-dialog-centered">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
@@ -185,7 +185,7 @@
                                                                                 class="btn btn-secondary btn-sm"
                                                                                 data-bs-dismiss="modal">Annuler
                                                                         </button>
-                                                                        <a href="{{ '/video/' ~ figure.videos[0].id }}" data-turbo="false"
+                                                                        <a href="{{ '/video/' ~ video.id }}" data-turbo="false"
                                                                            class="btn btn-danger btn-sm">Supprimer</a>
                                                                     </div>
                                                                 </div>
