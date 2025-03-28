@@ -71,7 +71,7 @@ class AppFixtures extends Fixture
 
         $figure = new Figure();
         $figure->author = $user;
-        $figure->name = 'indy';
+        $figure->name = 'Indy';
         $figure->description =
             'Saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière';
         $figure->figureGroup = $categories['grabs'];

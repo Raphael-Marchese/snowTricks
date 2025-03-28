@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Message;
 use App\Entity\User;
-use App\Form\CreateFigureType;
 use App\Form\CreateMessageType;
 use App\Repository\FigureRepository;
 use App\Repository\ImageRepository;
@@ -18,9 +17,9 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class GetFigureController extends AbstractController
 {
-    #[Route('/figure/{id}', name: 'app_single_figure', requirements: ['id' => '\d+'])]
+    #[Route('/figure/{slug}', name: 'app_single_figure', requirements: ['slug' => '[a-zA-Z0-9-]+'])]
     public function __invoke(
-        int $id,
+        string $slug,
         #[CurrentUser] ?User $user,
         FigureRepository $figureRepository,
         MessageRepository $messageRepository,
@@ -28,7 +27,8 @@ class GetFigureController extends AbstractController
         VideoRepository $videoRepository,
         Request $request
     ): Response {
-        $singleFigure = $figureRepository->find($id);
+
+        $singleFigure = $figureRepository->findOneBy(['name' => str_replace('-', ' ', $slug)]);
 
         $comments = $messageRepository->findBy(['figure' => $singleFigure], ['createdAt' => 'DESC']);
 

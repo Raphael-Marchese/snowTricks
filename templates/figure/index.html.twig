@@ -14,7 +14,7 @@
                                 <h1 class="fw-bolder mb-1 text-center">{{ figure.name|capitalize }}</h1>
                                 {% if app.user %}
                                     <div class="action-buttons d-flex gap-2 justify-content-end m-2">
-                                        <a href="{{ '/update/figure/' ~ figure.id }}" style="position: relative;" data-turbo="false">
+                                        <a href="{{ '/update/figure/' ~ figure.name|slug }}" style="position: relative;" data-turbo="false">
                                             <button class="btn btn-secondary btn-icon" title="Modifier">
                                                 <i class="bi bi-pencil"></i>
                                             </button>

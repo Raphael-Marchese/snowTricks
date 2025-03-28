@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CreateFigureController extends AbstractController
 {
@@ -33,6 +34,7 @@ class CreateFigureController extends AbstractController
         FilesUploader $filesUploader,
         EntityManagerInterface $entityManager,
         CategoryRepository $categoryRepository,
+        SluggerInterface $slugger,
     ) {
         $figure = new Figure();
         $form = $this->createForm(CreateFigureType::class, $figure);
@@ -47,6 +49,14 @@ class CreateFigureController extends AbstractController
                 $figure = $form->getData();
                 $figure->author = $user;
                 $figure->createdAt = new \DateTimeImmutable();
+                $name = $form->get('name')->getData();
+                $name = preg_replace('/[éèêë]/u', 'e', $name);
+                $name = preg_replace('/[àáâä]/u', 'a', $name);
+                $name = preg_replace('/[îï]/u', 'i', $name);
+                $name = preg_replace('/[ôö]/u', 'o', $name);
+                $name = preg_replace('/[ùúûü]/u', 'u', $name);
+                $name = ucfirst($name);
+                $figure->name = $name;
 
                 $categoryName = $form->get('figureGroup')->getData();
 
@@ -80,14 +90,14 @@ class CreateFigureController extends AbstractController
                         $figure->addVideo($video);
                     }
                 }
-
+                $slug = $slugger->slug($figure->name);
                 $entityManager->persist($figure);
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Votre figure a été créée');
 
                 return $this->redirectToRoute('app_single_figure', [
-                    'id' => $figure->id
+                    'slug' => $slug
                 ]);
             } catch (\Exception $e) {
                 throw new \Exception($e->getMessage());
