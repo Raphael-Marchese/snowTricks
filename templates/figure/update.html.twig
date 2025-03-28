@@ -24,11 +24,13 @@
                                            value="{{ field_value(form.name) }}"
                                            placeholder="Nom de la figure"
                                     />
+                                    {{ form_errors(form.name) }}
                                     <label for={{ field_name(form.name) }}>Nom</label>
                                 </div>
                                 <!-- Figure Group input-->
                                 <div class="form-floating mb-3">
                                     {{ form_widget(form.figureGroup, { 'attr': {'class': 'form-control', 'placeholder': 'Choisir un groupe'} }) }}
+                                    {{ form_errors(form.figureGroup) }}
                                     <label for="{{ field_name(form.figureGroup) }}">Group</label>
                                 </div>
 
@@ -58,7 +60,8 @@
                                         <li>
                                             {{ form_widget(illustrationField) }}
                                             {{ form_errors(illustrationField) }}
-                                            <button type="button" class="btn btn-danger btn-sm ms-2 mt-2" onclick="this.parentElement.remove()">
+                                            <button type="button" class="btn btn-danger btn-sm ms-2 mt-2"
+                                                    onclick="this.parentElement.remove()">
                                                 Supprimer
                                             </button>
                                         </li>
@@ -69,7 +72,7 @@
                                     image
                                 </button>
 
-                                {% if figure.videos is not empty%}
+                                {% if figure.videos is not empty %}
 
                                     <p>Vidéos existantes :</p>
                                     <ul id="existing-videos-list" class="list-unstyled">
@@ -114,8 +117,8 @@
                                 <div class="form-floating mb-3">
                                     <textarea class="form-control"
                                               name="{{ field_name(form.description) }}"
-                                              value="{{ field_value(form.description) }}"
-                                              placeholder="Description de la figure" style="height: 20rem"></textarea>
+                                              placeholder="Description de la figure" style="height: 20rem">{{ form.description.vars.value }}</textarea>
+                                    {{ form_errors(form.description) }}
                                     <label for={{ field_name(form.description) }}>Description</label>
                                 </div>
 
@@ -126,6 +129,7 @@
                                             value="published" type="submit">Éditer
                                     </button>
                                 </div>
+                                {% do form.illustrations.setRendered() %}
                                 {{ form_rest(form) }}
 
                             </form>
