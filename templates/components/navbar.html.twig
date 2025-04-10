@@ -2,7 +2,7 @@
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid px-5">
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand" href="/" data-turbo="false">
                     <img src="{{ asset('assets/websiteUtils/logo.png') }}" alt="logo snowtricks"
                          style="width: 110px; height: 60px; object-fit: contain;">
                 </a>
@@ -13,14 +13,14 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/" data-turbo="false">Home</a></li>
                     {% if not app.user %}
-                    <li class="nav-item"><a class="nav-link" href="/login">Sign in</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/register">Sign up</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login" data-turbo="false">Sign in</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/register" data-turbo="false">Sign up</a></li>
                     {% endif %}
                     {% if app.user %}
-                        <li class="nav-item"><a class="nav-link" href="/figure/create">New Trick</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/figure/create" data-turbo="false">New Trick</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/logout" data-turbo="false">Logout</a></li>
                     {% endif %}
 
                 </ul>

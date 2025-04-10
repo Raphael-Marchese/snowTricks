@@ -17,6 +17,8 @@
                             <form id="createPostForm" method="post"
                                   enctype="multipart/form-data">
                                 {{ form_start(form) }}
+                                <div class="error">
+                                </div>
                                 <!-- Figure Name input-->
                                 <div class="form-floating mb-3">
                                     <input class="form-control"
@@ -24,16 +26,14 @@
                                             value="{{ field_value(form.name) }}"
                                             placeholder="Nom de la figure"
                                     />
+                                    {{ form_errors(form.name) }}
                                     <label for={{ field_name(form.name) }}>Nom</label>
                                 </div>
                                 <!-- Figure Group input-->
                                 <div class="form-floating mb-3">
-                                    <input class="form-control"
-                                           name="{{ field_name(form.figureGroup) }}"
-                                           value="{{ field_value(form.figureGroup) }}"
-                                           placeholder="Nom de la figure"
-                                    />
-                                    <label for={{ field_name(form.figureGroup) }}>Groupe figure</label>
+                                    {{ form_widget(form.figureGroup, { 'attr': {'class': 'form-control', 'placeholder': 'Choisir un groupe'} }) }}
+                                    {{ form_errors(form.figureGroup) }}
+                                    <label for="{{ field_name(form.figureGroup) }}">Group</label>
                                 </div>
 
                                 <ul id="illustrations-list" class="list-unstyled" data-prototype="{{ form_widget(form.illustrations.vars.prototype)|e }}" >
@@ -70,9 +70,9 @@
                                               name="{{ field_name(form.description) }}"
                                               value="{{ field_value(form.description) }}"
                                               placeholder="Description de la figure" style="height: 20rem" ></textarea>
+                                    {{ form_errors(form.description) }}
                                     <label for={{ field_name(form.description) }}>Description</label>
                                 </div>
-
 
                                 <!-- Submit Button-->
                                 <div class="d-grid">

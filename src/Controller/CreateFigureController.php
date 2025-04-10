@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Figure;
+use App\Entity\Image;
 use App\Entity\User;
+use App\Entity\Video;
 use App\Form\CreateFigureType;
+use App\Repository\CategoryRepository;
 use App\Repository\FigureRepository;
 use App\Repository\UserRepository;
 use App\Service\FilesUploader;
@@ -17,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CreateFigureController extends AbstractController
 {
@@ -28,7 +32,9 @@ class CreateFigureController extends AbstractController
         #[Autowire('%kernel.project_dir%/public/uploads/illustrations')] string $illustrationsDirectory,
         #[Autowire('%kernel.project_dir%/public/uploads/videos')] string $videosDirectory,
         FilesUploader $filesUploader,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        CategoryRepository $categoryRepository,
+        SluggerInterface $slugger,
     ) {
         $figure = new Figure();
         $form = $this->createForm(CreateFigureType::class, $figure);
@@ -43,13 +49,33 @@ class CreateFigureController extends AbstractController
                 $figure = $form->getData();
                 $figure->author = $user;
                 $figure->createdAt = new \DateTimeImmutable();
+                $name = $form->get('name')->getData();
+                $name = preg_replace('/[éèêë]/u', 'e', $name);
+                $name = preg_replace('/[àáâä]/u', 'a', $name);
+                $name = preg_replace('/[îï]/u', 'i', $name);
+                $name = preg_replace('/[ôö]/u', 'o', $name);
+                $name = preg_replace('/[ùúûü]/u', 'u', $name);
+                $name = ucfirst($name);
+                $figure->name = $name;
+
+                $categoryName = $form->get('figureGroup')->getData();
+
+                $category = $categoryRepository->findOneBy(['name' => $categoryName]);
+
+                if ($category) {
+                    $figure->figureGroup = $category;
+                }
 
                 $illustrations = $form->get('illustrations')->getData();
 
                 if ($illustrations) {
                     foreach ($illustrations as $illustration) {
-                        $filename = $filesUploader->upload($illustration, $illustrationsDirectory);
-                        $figure->illustrations[] = $filename;
+                        $path = $filesUploader->upload($illustration, $illustrationsDirectory);
+                        $image = new Image();
+                        $image->setFigure($figure);
+                        $image->path = $path;
+
+                        $figure->addIllustration($image);
                     }
                 }
 
@@ -58,17 +84,20 @@ class CreateFigureController extends AbstractController
                 if ($videos) {
                     foreach ($videos as $video) {
                         $filename = $filesUploader->upload($video, $videosDirectory);
-                        $figure->videos[] = $filename;
+                        $video = new Video();
+                        $video->setFigure($figure);
+                        $video->path = $filename;
+                        $figure->addVideo($video);
                     }
                 }
-
+                $slug = $slugger->slug($figure->name);
                 $entityManager->persist($figure);
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Votre figure a été créée');
 
                 return $this->redirectToRoute('app_single_figure', [
-                    'id' => $figure->id
+                    'slug' => $slug
                 ]);
             } catch (\Exception $e) {
                 throw new \Exception($e->getMessage());

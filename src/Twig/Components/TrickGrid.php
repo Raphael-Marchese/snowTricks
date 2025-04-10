@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Twig\Components;
 
+use App\Repository\ImageRepository;
+use App\Repository\VideoRepository;
 use App\Service\FigureCollection;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
@@ -23,8 +25,11 @@ class TrickGrid
     #[LiveProp]
     public int $page = 1;
 
-    public function __construct(private readonly FigureCollection $figures)
-    {
+    public function __construct(
+        private readonly FigureCollection $figures,
+        private readonly ImageRepository $imageRepository,
+        private readonly VideoRepository $videoRepository
+    ) {
     }
 
     #[LiveAction]
@@ -49,10 +54,13 @@ class TrickGrid
 
         $items = [];
         foreach ($figures as $i => $figure) {
+            $images = $this->imageRepository->findBy(['figure' => $figure->id]);
+            $videos = $this->videoRepository->findBy(['figure' => $figure->id]);
             $items[] = [
                 'id' => $figure->id,
                 'name' => $figure->name,
-                'illustrations' => $figure->illustrations,
+                'illustrations' => $images,
+                'videos' => $videos,
             ];
         }
 

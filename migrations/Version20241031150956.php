@@ -19,7 +19,6 @@ final class Version20241031150956 extends AbstractMigration
         $connection = $this->connection;
         $schemaManager = $connection->createSchemaManager();
 
-        // Liste des tables existantes
         $existingTables = $schemaManager->listTableNames();
 
         if (!in_array('"user"', $existingTables)) {

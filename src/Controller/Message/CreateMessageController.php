@@ -18,6 +18,7 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[AsController]
 class CreateMessageController extends AbstractController
@@ -31,10 +32,12 @@ class CreateMessageController extends AbstractController
         FigureRepository $figureRepository,
         UserRepository $userRepository,
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        SluggerInterface $slugger
     ): Response {
         $figure = $figureRepository->find($id);
 
+        $slug = $slugger->slug($figure->name);
         if (!$user instanceof User) {
              throw $this->createAccessDeniedException();
         }
@@ -52,12 +55,12 @@ class CreateMessageController extends AbstractController
             $this->addFlash('success', 'Votre message a été créé');
 
             return $this->redirectToRoute('app_single_figure', [
-                'id' => $id,
+                'slug' => $slug,
             ]);
         }
 
         return $this->redirectToRoute('app_single_figure', [
-            'id' => $id,
+            'slug' => $slug,
         ]);
     }
 }

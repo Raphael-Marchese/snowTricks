@@ -3,13 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Figure;
-use App\Entity\User;
-use phpDocumentor\Reflection\Types\Collection;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Service\CategoryNameEnum;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,10 +15,21 @@ class CreateFigureType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $figureGroup = $options['figureGroup'] ?? null;
+
         $builder
             ->add('name')
             ->add('description')
-            ->add('figureGroup')
+            ->add('figureGroup', ChoiceType::class, [
+                'choices' => array_combine(
+                    array_map(fn($enum) => $enum->name, CategoryNameEnum::cases()),
+                    array_map(fn($enum) => $enum->value, CategoryNameEnum::cases())
+                ),
+                'placeholder' => 'Choose a group',
+                'required' => true,
+                'mapped' => false,
+                'data' => $figureGroup ? $figureGroup->name->value : null
+            ])
             ->add('illustrations', CollectionType::class, [
                 'entry_type' => FileType::class,
                 'entry_options' => [
@@ -31,6 +40,7 @@ class CreateFigureType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+                'required' => false,
             ])
             ->add('videos', CollectionType::class, [
                 'entry_type' => FileType::class,
@@ -42,8 +52,7 @@ class CreateFigureType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-                'prototype' => true,
-                'prototype_name' => '__name__',
+                'required' => false,
             ])
         ;
     }
@@ -53,5 +62,6 @@ class CreateFigureType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Figure::class,
         ]);
+        $resolver->setDefined(['figureGroup']);
     }
 }
