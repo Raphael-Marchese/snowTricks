@@ -22,8 +22,8 @@ class CreateFigureType extends AbstractType
             ->add('description')
             ->add('figureGroup', ChoiceType::class, [
                 'choices' => array_combine(
-                    array_map(fn($enum) => $enum->name, CategoryNameEnum::cases()),
-                    array_map(fn($enum) => $enum->value, CategoryNameEnum::cases())
+                    array_map(static fn($enum) => $enum->name, CategoryNameEnum::cases()),
+                    array_map(static fn($enum) => $enum->value, CategoryNameEnum::cases())
                 ),
                 'placeholder' => 'Choose a group',
                 'required' => true,

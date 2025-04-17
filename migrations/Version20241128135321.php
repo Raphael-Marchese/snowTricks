@@ -21,7 +21,7 @@ final class Version20241128135321 extends AbstractMigration
         // Récupérer la liste des tables existantes
         $existingTables = $connection->getSchemaManager()->listTableNames();
 
-        if (!in_array('figure', $existingTables)) {
+        if (!in_array('figure', $existingTables, true)) {
             $this->addSql(
                 'CREATE TABLE figure (id SERIAL NOT NULL, author_id INT NOT NULL, name VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, description TEXT DEFAULT NULL, figure_group VARCHAR(255) DEFAULT NULL, illustrations JSON DEFAULT NULL, videos JSON DEFAULT NULL, PRIMARY KEY(id))'
             );
@@ -30,7 +30,7 @@ final class Version20241128135321 extends AbstractMigration
             $this->addSql('COMMENT ON COLUMN figure.updated_at IS \'(DC2Type:datetime_immutable)\'');
         }
 
-        if (!in_array('message', $existingTables)) {
+        if (!in_array('message', $existingTables, true)) {
             $this->addSql(
                 'CREATE TABLE message (id SERIAL NOT NULL, author_id INT NOT NULL, figure_id INT NOT NULL, content TEXT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))'
             );

@@ -19,8 +19,8 @@ class CategoryType extends AbstractType
                 'label' => 'Category',
                 'choices' => array_combine(
                 // Création des labels pour les choix
-                    array_map(fn($enum) => $enum->name, CategoryNameEnum::cases()),
-                    array_map(fn($enum) => $enum->value, CategoryNameEnum::cases())
+                    array_map(static fn($enum) => $enum->name, CategoryNameEnum::cases()),
+                    array_map(static fn($enum) => $enum->value, CategoryNameEnum::cases())
                 ),
                 'placeholder' => 'Choose a group',
                 'required' => true,

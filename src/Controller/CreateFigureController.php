@@ -100,7 +100,7 @@ class CreateFigureController extends AbstractController
                     'slug' => $slug
                 ]);
             } catch (\Exception $e) {
-                throw new \Exception($e->getMessage());
+                throw new \RuntimeException($e->getMessage());
             }
         }
 

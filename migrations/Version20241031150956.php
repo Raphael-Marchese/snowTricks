@@ -21,7 +21,7 @@ final class Version20241031150956 extends AbstractMigration
 
         $existingTables = $schemaManager->listTableNames();
 
-        if (!in_array('"user"', $existingTables)) {
+        if (!in_array('"user"', $existingTables, true)) {
             $this->addSql('CREATE TABLE "user" (id SERIAL NOT NULL, username VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, profile_picture VARCHAR(255) DEFAULT NULL, is_authenticated BOOLEAN DEFAULT NULL, PRIMARY KEY(id))');
         }
     }
