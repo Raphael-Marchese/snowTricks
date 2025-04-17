@@ -35,109 +35,115 @@
                                             <article class="d-none d-md-block">
                                                 {% if  figure.illustrations is not empty or figure.videos is not empty %}
 
-                                                <!-- Zone d'aperçu -->
-                                                <div class="container mt-4">
-                                                    <div id="preview" class="mb-3 text-center">
-                                                        <div class="position-relative">
-                                                            <!-- Aperçu Image -->
-                                                            <img id="previewImage" class="img-fluid d-none"
-                                                                 style="max-height: 400px;" alt="Preview" data-id=""
-                                                                 data-type="">
-                                                            <!-- Aperçu Vidéo -->
-                                                            <video id="previewVideo" controls class="img-fluid d-none"
-                                                                   style="max-height: 400px;" data-id="" data-type="">
-                                                                <source id="videoSource" src="">
-                                                                Votre navigateur ne supporte pas les vidéos.
-                                                            </video>
+                                                    <!-- Zone d'aperçu -->
+                                                    <div class="container mt-4">
+                                                        <div id="preview" class="mb-3 text-center">
+                                                            <div class="position-relative">
+                                                                <!-- Aperçu Image -->
+                                                                <img id="previewImage" class="img-fluid d-none"
+                                                                     style="max-height: 400px;" alt="Preview" data-id=""
+                                                                     data-type="">
+                                                                <!-- Aperçu Vidéo -->
+                                                                <video id="previewVideo" controls
+                                                                       class="img-fluid d-none"
+                                                                       style="max-height: 400px;" data-id=""
+                                                                       data-type="">
+                                                                    <source id="videoSource" src="">
+                                                                    Votre navigateur ne supporte pas les vidéos.
+                                                                </video>
 
-                                                            <!-- Icônes d'action -->
-                                                            <div class="action-buttons d-flex justify-content-center gap-2 position-absolute top-0 end-0 p-2">
-                                                                <a href="#" id="editPreview"
-                                                                   class="btn btn-secondary btn-icon" title="Modifier">
-                                                                    <i class="bi bi-pencil"></i>
-                                                                </a>
-                                                                <a href="#" id="deletePreview"
-                                                                   class="btn btn-danger btn-icon" title="Supprimer">
-                                                                    <i class="bi bi-trash"></i>
-                                                                </a>
+                                                                <!-- Icônes d'action -->
+                                                                <div class="action-buttons d-flex justify-content-center gap-2 position-absolute top-0 end-0 p-2">
+                                                                    <a href="#" id="editPreview"
+                                                                       class="btn btn-secondary btn-icon"
+                                                                       title="Modifier">
+                                                                        <i class="bi bi-pencil"></i>
+                                                                    </a>
+                                                                    <a href="#" id="deletePreview"
+                                                                       class="btn btn-danger btn-icon"
+                                                                       title="Supprimer">
+                                                                        <i class="bi bi-trash"></i>
+                                                                    </a>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <!-- Galerie avec flèches -->
-                                                    <div class="d-flex align-items-center">
-                                                        <!-- Flèche gauche -->
-                                                        <button type="button" class="btn btn-outline-primary" id="arrowLeft">
-                                                            <i class="bi bi-chevron-left"></i>
-                                                        </button>
+                                                        <!-- Galerie avec flèches -->
+                                                        <div class="d-flex align-items-center">
+                                                            <!-- Flèche gauche -->
+                                                            <button type="button" class="btn btn-outline-primary"
+                                                                    id="arrowLeft">
+                                                                <i class="bi bi-chevron-left"></i>
+                                                            </button>
 
-                                                        <!-- Galerie -->
-                                                        <div class="flex-grow-1 overflow-hidden d-flex mx-2"
-                                                             id="thumbnailContainer"
-                                                             style="gap: 10px; overflow-x: auto; scroll-behavior: smooth;">
-                                                            {% for image in figure.illustrations %}
-                                                                <div class="d-flex flex-column align-items-center mb-3"
-                                                                     style="gap: 5px;">
-                                                                    <img src="{{ asset('uploads/illustrations/' ~ image.path) }}"
-                                                                         class="img-thumbnail thumbnail"
-                                                                         alt="Image"
-                                                                         data-type="image"
-                                                                         data-id="{{ image.id }}"
-                                                                         data-src="{{ asset('uploads/illustrations/' ~ image.path) }}"
-                                                                         style="cursor: pointer; width: 100px; height: 100px;">
-                                                                    <div class="action-buttons d-flex justify-content-center gap-2">
-                                                                        <a href="{{ '/image/' ~ image.id ~ '/edit' }}"
-                                                                           data-turbo="false"
-                                                                           class="btn btn-secondary btn-icon btn-sm"
-                                                                           title="Modifier">
-                                                                            <i class="bi bi-pencil"></i>
-                                                                        </a>
-                                                                        <a href="{{ '/image/' ~ image.id }}"
-                                                                           data-turbo="false"
-                                                                           class="btn btn-danger btn-icon btn-sm"
-                                                                           title="Supprimer">
-                                                                            <i class="bi bi-trash"></i>
-                                                                        </a>
+                                                            <!-- Galerie -->
+                                                            <div class="flex-grow-1 overflow-hidden d-flex mx-2"
+                                                                 id="thumbnailContainer"
+                                                                 style="gap: 10px; overflow-x: auto; scroll-behavior: smooth;">
+                                                                {% for image in figure.illustrations %}
+                                                                    <div class="d-flex flex-column align-items-center mb-3"
+                                                                         style="gap: 5px;">
+                                                                        <img src="{{ asset('uploads/illustrations/' ~ image.path) }}"
+                                                                             class="img-thumbnail thumbnail"
+                                                                             alt="Image"
+                                                                             data-type="image"
+                                                                             data-id="{{ image.id }}"
+                                                                             data-src="{{ asset('uploads/illustrations/' ~ image.path) }}"
+                                                                             style="cursor: pointer; width: 100px; height: 100px;">
+                                                                        <div class="action-buttons d-flex justify-content-center gap-2">
+                                                                            <a href="{{ '/image/' ~ image.id ~ '/edit' }}"
+                                                                               data-turbo="false"
+                                                                               class="btn btn-secondary btn-icon btn-sm"
+                                                                               title="Modifier">
+                                                                                <i class="bi bi-pencil"></i>
+                                                                            </a>
+                                                                            <a href="{{ '/image/' ~ image.id }}"
+                                                                               data-turbo="false"
+                                                                               class="btn btn-danger btn-icon btn-sm"
+                                                                               title="Supprimer">
+                                                                                <i class="bi bi-trash"></i>
+                                                                            </a>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            {% endfor %}
+                                                                {% endfor %}
 
-                                                            {% for video in figure.videos %}
-                                                                <div class="d-flex flex-column align-items-center mb-3"
-                                                                     style="gap: 5px;">
-                                                                    <video class="img-thumbnail thumbnail"
-                                                                           style="width: 100px; height: 100px; cursor: pointer;"
-                                                                           data-type="video"
-                                                                           data-id="{{ video.id }}"
-                                                                           data-src="{{ asset('uploads/videos/' ~ video.path) }}"
-                                                                           muted>
-                                                                        <source src="{{ asset('uploads/videos/' ~ video.path) }}"
-                                                                                type="video/mp4">
-                                                                    </video>
-                                                                    <div class="action-buttons d-flex justify-content-center gap-2">
-                                                                        <a href="{{ '/video/' ~ video.id ~ '/edit' }}"
-                                                                           data-turbo="false"
-                                                                           class="btn btn-secondary btn-icon btn-sm"
-                                                                           title="Modifier">
-                                                                            <i class="bi bi-pencil"></i>
-                                                                        </a>
-                                                                        <button class="btn btn-danger btn-icon btn-sm"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#deleteVideoModal-{{ video.id }}"
-                                                                                title="Supprimer">
-                                                                            <i class="bi bi-trash"></i>
-                                                                        </button>
+                                                                {% for video in figure.videos %}
+                                                                    <div class="d-flex flex-column align-items-center mb-3"
+                                                                         style="gap: 5px;">
+                                                                        <video class="img-thumbnail thumbnail"
+                                                                               style="width: 100px; height: 100px; cursor: pointer;"
+                                                                               data-type="video"
+                                                                               data-id="{{ video.id }}"
+                                                                               data-src="{{ asset('uploads/videos/' ~ video.path) }}"
+                                                                               muted>
+                                                                            <source src="{{ asset('uploads/videos/' ~ video.path) }}"
+                                                                                    type="video/mp4">
+                                                                        </video>
+                                                                        <div class="action-buttons d-flex justify-content-center gap-2">
+                                                                            <a href="{{ '/video/' ~ video.id ~ '/edit' }}"
+                                                                               data-turbo="false"
+                                                                               class="btn btn-secondary btn-icon btn-sm"
+                                                                               title="Modifier">
+                                                                                <i class="bi bi-pencil"></i>
+                                                                            </a>
+                                                                            <button class="btn btn-danger btn-icon btn-sm"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#deleteVideoModal-{{ video.id }}"
+                                                                                    title="Supprimer">
+                                                                                <i class="bi bi-trash"></i>
+                                                                            </button>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            {% endfor %}
+                                                                {% endfor %}
+                                                            </div>
+
+                                                            <!-- Flèche droite -->
+                                                            <button type="button" class="btn btn-outline-primary"
+                                                                    id="arrowRight">
+                                                                <i class="bi bi-chevron-right"></i>
+                                                            </button>
                                                         </div>
-
-                                                        <!-- Flèche droite -->
-                                                        <button type="button" class="btn btn-outline-primary" id="arrowRight">
-                                                            <i class="bi bi-chevron-right"></i>
-                                                        </button>
                                                     </div>
-                                                </div>
 
                                                 {% endif %}
                                                 <!-- Figure Group input-->
@@ -392,7 +398,8 @@
                     updatePreview(thumbnail.dataset.type, thumbnail.dataset.src, thumbnail.dataset.id);
                 });
             });
-        %});
+        %
+        });
 
 
     </script>
