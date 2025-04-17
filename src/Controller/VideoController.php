@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/video')]
 final class VideoController extends AbstractController
@@ -71,7 +72,7 @@ final class VideoController extends AbstractController
     }
 
     #[Route('delete/{id}', name: 'app_video_delete', requirements: ['id' => '\d+'])]
-    public function delete(Request $request, Video $video, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Video $video, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $figure = $video->getFigure();
 
@@ -87,6 +88,8 @@ final class VideoController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_update_figure', ['id' => $figure->id]);
+        $slug = $slugger->slug($figure->name);
+
+        return $this->redirectToRoute('app_update_figure', ['slug' => $slug]);
     }
 }
