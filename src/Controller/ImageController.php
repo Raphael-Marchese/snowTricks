@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/image')]
 final class ImageController extends AbstractController
@@ -69,7 +70,7 @@ final class ImageController extends AbstractController
     }
 
     #[Route('delete/{id}', name: 'app_image_delete', methods: ['POST'])]
-    public function delete(Request $request, Image $image, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Image $image, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $figure = $image->getFigure();
 
@@ -84,6 +85,8 @@ final class ImageController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_update_figure', ['id' => $figure->id]);
+        $slug = $slugger->slug($figure->name);
+
+        return $this->redirectToRoute('app_update_figure', ['slug' => $slug]);
     }
 }
