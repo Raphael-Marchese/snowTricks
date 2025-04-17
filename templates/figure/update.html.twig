@@ -33,6 +33,7 @@
                                         <div class="row g-md-x-5 justify-content-center">
                                             <!-- Post content-->
                                             <article class="d-none d-md-block">
+                                                {% if  figure.illustrations is not empty or figure.videos is not empty %}
 
                                                 <!-- Zone d'aperçu -->
                                                 <div class="container mt-4">
@@ -138,7 +139,7 @@
                                                     </div>
                                                 </div>
 
-
+                                                {% endif %}
                                                 <!-- Figure Group input-->
                                                 <div class="form-floating mb-3">
                                                     {{ form_widget(form.figureGroup, { 'attr': {'class': 'form-control', 'placeholder': 'Choisir un groupe'} }) }}
@@ -391,7 +392,7 @@
                     updatePreview(thumbnail.dataset.type, thumbnail.dataset.src, thumbnail.dataset.id);
                 });
             });
-        });
+        %});
 
 
     </script>
