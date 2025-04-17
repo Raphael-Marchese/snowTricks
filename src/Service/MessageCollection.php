@@ -10,7 +10,7 @@ class MessageCollection implements \IteratorAggregate, \Countable
 {
     private array $messages;
 
-    public function __construct(array $messages = [], private ?MessageRepository $messageRepository = null)
+    public function __construct(array $messages = [], private readonly ?MessageRepository $messageRepository = null)
     {
         $this->messages = $messages ?: $this->loadMessages();
     }

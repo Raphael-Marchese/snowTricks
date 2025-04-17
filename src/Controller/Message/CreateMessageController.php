@@ -37,6 +37,10 @@ class CreateMessageController extends AbstractController
     ): Response {
         $figure = $figureRepository->find($id);
 
+        if (!$figure) {
+            throw $this->createNotFoundException('La figure demandée n\'existe pas.');
+        }
+
         $slug = $slugger->slug($figure->name);
         if (!$user instanceof User) {
              throw $this->createAccessDeniedException();

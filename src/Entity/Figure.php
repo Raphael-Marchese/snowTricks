@@ -78,11 +78,9 @@ class Figure
 
     public function removeIllustration(Image $illustration): static
     {
-        if ($this->illustrations->removeElement($illustration)) {
-            // set the owning side to null (unless already changed)
-            if ($illustration->getFigure() === $this) {
-                $illustration->setFigure(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->illustrations->removeElement($illustration) && $illustration->getFigure() === $this) {
+            $illustration->setFigure(null);
         }
 
         return $this;
@@ -108,11 +106,9 @@ class Figure
 
     public function removeVideo(Video $video): static
     {
-        if ($this->videos->removeElement($video)) {
-            // set the owning side to null (unless already changed)
-            if ($video->getFigure() === $this) {
-                $video->setFigure(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->videos->removeElement($video) && $video->getFigure() === $this) {
+            $video->setFigure(null);
         }
 
         return $this;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Figure;
 
+use App\Entity\Image;
 use App\Entity\User;
 use App\Repository\FigureRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,8 +38,9 @@ class DeleteImageController extends AbstractController
         }
 
         // Suppression du chemin de l'image dans le tableau
+
         $illustrations = $figure->illustrations;
-        if (($key = array_search($imagePath, $illustrations)) !== false) {
+        if (($key = array_search($imagePath, array($illustrations), true)) !== false) {
             unset($illustrations[$key]);
             $figure->illustrations = $illustrations; // Réindexer le tableau
         }

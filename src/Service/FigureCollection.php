@@ -10,7 +10,7 @@ class FigureCollection implements \IteratorAggregate, \Countable
 {
     private array $figures;
 
-    public function __construct(array $figures = [], private ?FigureRepository $figureRepository = null)
+    public function __construct(array $figures = [], private readonly ?FigureRepository $figureRepository = null)
     {
         $this->figures = $figures ?: $this->loadFigures();
     }

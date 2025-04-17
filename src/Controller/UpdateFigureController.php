@@ -63,7 +63,7 @@ class UpdateFigureController extends AbstractController
                 $name = preg_replace('/[ùúûü]/u', 'u', $name);
                 $name = ucfirst($name);
                 $figure->name = $name;
-            $slug = $slugger->slug($name);
+            $slug = $slugger->slug($name)->toString();
 
             $categoryName = $form->get('figureGroup')->getData();
 
