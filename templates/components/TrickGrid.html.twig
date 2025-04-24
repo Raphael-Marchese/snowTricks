@@ -4,7 +4,7 @@
         {# 🦊 #}
         {# Adding a fake "previous page" div is enough to trick the system #}
         {# It must have the same ID than the original page #}
-        <div class="TrickGrid_page" id="page--{{ page - 1 }}" ></div>
+        <div class="TrickGrid_page" id="page--{{ page - 1 }}" data-live-ignore="true"></div>
     {% endif %}
 
     {# Current page #}

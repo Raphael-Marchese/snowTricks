@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Image;
 use App\Form\ImageType;
 use App\Repository\ImageRepository;
+use App\Service\FilesUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,10 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 #[Route('/image')]
 final class ImageController extends AbstractController
 {
+    public function __construct(private SluggerInterface $slugger)
+    {
+    }
+
     #[Route(name: 'app_image_index', methods: ['GET'])]
     public function index(ImageRepository $imageRepository): Response
     {
@@ -52,15 +57,32 @@ final class ImageController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_image_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Image $image, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(
+        Request $request,
+        Image $image,
+        EntityManagerInterface $entityManager,
+        FilesUploader $filesUploader,
+    ): Response {
         $form = $this->createForm(ImageType::class, null, ['image' => $image]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $file = $request->files->get('image')['illustrations'];
 
-            return $this->redirectToRoute('app_image_index', [], Response::HTTP_SEE_OTHER);
+            $newImage = $filesUploader->upload($file, 'uploads/illustrations');
+
+            $image->path = $newImage;
+            $figure = $image->getFigure();
+
+            if (!$figure) {
+                return $this->redirectToRoute('app_homepage', ['id' => $figure->id]);
+            }
+
+            $entityManager->persist($image);
+            $entityManager->flush();
+            $slug = $this->slugger->slug($figure->name);
+
+            return $this->redirectToRoute('app_update_figure', ['slug' => $slug]);
         }
 
         return $this->render('image/edit.html.twig', [
@@ -70,22 +92,20 @@ final class ImageController extends AbstractController
     }
 
     #[Route('delete/{id}', name: 'app_image_delete', methods: ['POST'])]
-    public function delete(Request $request, Image $image, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function delete(Request $request, Image $image, EntityManagerInterface $entityManager): Response
     {
         $figure = $image->getFigure();
 
-        if(!$figure)
-        {
+        if (!$figure) {
             return $this->redirectToRoute('app_homepage', ['id' => $figure->id]);
-
         }
 
-        if ($this->isCsrfTokenValid('delete'.$image->id, $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $image->id, $request->getPayload()->getString('_token'))) {
             $entityManager->remove($image);
             $entityManager->flush();
         }
 
-        $slug = $slugger->slug($figure->name);
+        $slug = $this->slugger->slug($figure->name);
 
         return $this->redirectToRoute('app_update_figure', ['slug' => $slug]);
     }
