@@ -13,6 +13,8 @@ use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
+use function count;
+
 #[AsLiveComponent('TrickGrid', template: 'components/TrickGrid.html.twig')]
 class TrickGrid
 {
@@ -45,7 +47,7 @@ class TrickGrid
 
     public function hasMore(): bool
     {
-        return \count($this->figures) > ($this->page * self::PER_PAGE);
+        return count($this->figures) > ($this->page * self::PER_PAGE);
     }
 
     public function getItems(): array
@@ -53,7 +55,7 @@ class TrickGrid
         $figures = $this->figures->paginate($this->page, self::PER_PAGE);
 
         $items = [];
-        foreach ($figures as $i => $figure) {
+        foreach ($figures as $figure) {
             $images = $this->imageRepository->findBy(['figure' => $figure->id]);
             $videos = $this->videoRepository->findBy(['figure' => $figure->id]);
             $items[] = [

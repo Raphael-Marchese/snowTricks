@@ -2,11 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Figure;
 use App\Entity\Video;
 use App\Form\VideoType;
-use App\Repository\FigureRepository;
 use App\Repository\VideoRepository;
+use App\Service\FilesUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +16,10 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 #[Route('/video')]
 final class VideoController extends AbstractController
 {
+    public function __construct(private SluggerInterface $slugger)
+    {
+    }
+
     #[Route(name: 'app_video_index', methods: ['GET'])]
     public function index(VideoRepository $videoRepository): Response
     {
@@ -54,15 +57,29 @@ final class VideoController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_video_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Video $video, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Video $video, EntityManagerInterface $entityManager, FilesUploader $filesUploader): Response
     {
         $form = $this->createForm(VideoType::class, $video);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
 
-            return $this->redirectToRoute('app_video_index', [], Response::HTTP_SEE_OTHER);
+            $file = $request->files->get('video')['videos'];
+
+            $newvideo = $filesUploader->upload($file, 'uploads/videos');
+
+            $video->path = $newvideo;
+            $figure = $video->getFigure();
+
+            if (!$figure) {
+                return $this->redirectToRoute('app_homepage', ['id' => $figure->id]);
+            }
+
+            $entityManager->persist($video);
+            $entityManager->flush();
+            $slug = $this->slugger->slug($figure->name);
+
+            return $this->redirectToRoute('app_update_figure', ['slug' => $slug]);
         }
 
         return $this->render('video/edit.html.twig', [
@@ -72,7 +89,7 @@ final class VideoController extends AbstractController
     }
 
     #[Route('delete/{id}', name: 'app_video_delete', requirements: ['id' => '\d+'])]
-    public function delete(Request $request, Video $video, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function delete(Request $request, Video $video, EntityManagerInterface $entityManager): Response
     {
         $figure = $video->getFigure();
 
@@ -88,7 +105,7 @@ final class VideoController extends AbstractController
             $entityManager->flush();
         }
 
-        $slug = $slugger->slug($figure->name);
+        $slug = $this->slugger->slug($figure->name);
 
         return $this->redirectToRoute('app_update_figure', ['slug' => $slug]);
     }
